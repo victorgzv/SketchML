@@ -97,9 +97,7 @@ export default class displaySketches extends React.Component {
       const name = doc.data().name;
       const original_img = doc.data().image_url;
       console.log("name: "+ name  );
-      console.log("rows affected: "+querySnapshot.size  )
       
-    
       if(querySnapshot.size >0){
         this.setState({
           isEmpty: false

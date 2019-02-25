@@ -42,7 +42,7 @@ export default class Singup extends React.Component {
               <View style={styles.container}>
                {empty ? (
                   <View style={styles.container}>
-                  <Text>0 predictions found</Text>
+                  <Text>No predictions found</Text>
                   </View>
                ):(
                 <View style={styles.container}>

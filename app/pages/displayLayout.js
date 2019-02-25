@@ -1,6 +1,5 @@
 import React from 'react';
 import {StyleSheet,View,Text,TouchableOpacity,TextInput} from 'react-native';
-import { element } from 'prop-types';
 
 export default class Singup extends React.Component {
   unsubscribe = null;
@@ -10,7 +9,7 @@ export default class Singup extends React.Component {
   }
   componentDidMount(){
     // this._fetchNormalData();
-    unsubscribe = this.ref.onSnapshot(this.onImageLoad);
+    unsubscribe = this.ref.onSnapshot(this.onDataLoad);
     
   }
   componentWillUnmount() {
@@ -25,11 +24,31 @@ render(){
   			</View>
 			);
 }
-  onImageLoad = (querySnapshot) => {
+//Function to sort bounding boxes by its minY coordinate
+sortFunction(a, b) {
+  if (a['y0'] === b['y0']) {
+      return 0;
+  }
+  else {
+      return (a['y0'] < b['y0']) ? -1 : 1;
+  }
+}
+//This method returns information about the predicted bounding boxes and create code according to the type of object found
+  onDataLoad = (querySnapshot) => {
     var elements =[];
+   
+    
     querySnapshot.forEach((doc) => {
       const predictions = doc.data().predictions;
+      //Call to function sort by minY coordinate
+      let sorted_predictions = predictions.sort(this.sortFunction);
+
+      const imgWidth = doc.data().width;
+      const imgHeight = doc.data().height;
+      console.log(imgWidth,imgHeight);
+
       for(i=0;i<predictions.length;i++){
+          //Each type of object will add an UI element to the array of elements
           let objectType= predictions[i]['object'];
           if(objectType==="Textfield"){
             elements.push( 
@@ -43,6 +62,38 @@ render(){
             elements.push( <Text style = {styles.label}> Your text goes here </Text>);
           }
       }
+
+      let yCounter = 0;
+      let counterRows = 0;
+      var row = [];
+      for(i=0;i<sorted_predictions.length;i++){
+          // console.log(sorted_predictions[i]['y0']);
+       
+          if(sorted_predictions[i]['y0']>yCounter){
+            counterRows++;
+            yCounter = sorted_predictions[i]['y0'] +sorted_predictions[i]['height']
+           
+            if(sorted_predictions[i]['y0']<yCounter){
+              console.log("Element "+ sorted_predictions[i]['object']+" is in row: " + counterRows);
+            
+            }
+          }else{
+            if(sorted_predictions[i]['y0']<yCounter){
+              console.log("Element "+ sorted_predictions[i]['object']+" is in row: " + counterRows);
+             
+            }
+            continue;
+          }
+          
+         
+      }
+      console.log(counterRows);
+      console.log(row)
+      
+     
+     
+      
+      //Updating the state of widgets
       this.setState({
         widgets: elements
       });  
