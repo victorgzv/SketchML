@@ -66,21 +66,26 @@ sortFunction(a, b) {
       let yCounter = 0;
       let counterRows = 0;
       var row = [];
+      
+
       for(i=0;i<sorted_predictions.length;i++){
-          // console.log(sorted_predictions[i]['y0']);
-       
+         
+          row [counterRows] = [];//Creates a 2D array for each row
           if(sorted_predictions[i]['y0']>yCounter){
             counterRows++;
             yCounter = sorted_predictions[i]['y0'] +sorted_predictions[i]['height']
            
             if(sorted_predictions[i]['y0']<yCounter){
-              console.log("Element "+ sorted_predictions[i]['object']+" is in row: " + counterRows);
+              console.log("Element "+ sorted_predictions[i]['object']+" is in row: " + (counterRows-1));
+              let position = (counterRows-1);
+              row[position].push(sorted_predictions[i]);
             
             }
           }else{
             if(sorted_predictions[i]['y0']<yCounter){
-              console.log("Element "+ sorted_predictions[i]['object']+" is in row: " + counterRows);
-             
+              console.log("Element "+ sorted_predictions[i]['object']+" is in row: " + (counterRows-1));
+              let position = (counterRows-1);
+              row[position].push(sorted_predictions[i]);
             }
             continue;
           }
