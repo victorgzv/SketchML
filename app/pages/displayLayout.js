@@ -67,19 +67,17 @@ sortFunction(a, b) {
       let counterRows = 0;
       var row = [];
       
-
+      //For loop to iterate through sorted elements. It calculates the number of rows and the elements that are part of the rows.
       for(i=0;i<sorted_predictions.length;i++){
-         
           row [counterRows] = [];//Creates a 2D array for each row
           if(sorted_predictions[i]['y0']>yCounter){
             counterRows++;
             yCounter = sorted_predictions[i]['y0'] +sorted_predictions[i]['height']
-           
+      
             if(sorted_predictions[i]['y0']<yCounter){
               console.log("Element "+ sorted_predictions[i]['object']+" is in row: " + (counterRows-1));
               let position = (counterRows-1);
-              row[position].push(sorted_predictions[i]);
-            
+              row[position].push(sorted_predictions[i]);  
             }
           }else{
             if(sorted_predictions[i]['y0']<yCounter){
@@ -88,12 +86,43 @@ sortFunction(a, b) {
               row[position].push(sorted_predictions[i]);
             }
             continue;
+          }    
+      }//end for loop
+      console.log("No. of rows: "+counterRows);
+      // console.log(row);
+      let xCounter = 0;
+      
+      var orderElements=[];
+      var rowOrder=[];
+      for(i=0;i<row.length;i++){//Iterates through all the rows 
+        rowOrder[i]=[];
+          for(j=0;j<row[i].length;j++){//Iterates through all the columns of each row
+           
+            //If a row only contains one element
+            if(row[i].length===1){ 
+              // console.log("in_row: "+ i);
+              // console.log(row[i][j]);
+              console.log("There is only one elements on this row");
+              rowOrder[i].push(row[i][j]);
+            }else{
+              if(row[i][j]['x0']>xCounter){
+                xCounter = row[i][j]['x0'];
+                // console.log("the element on the most right is: "+row[i][j]['object']);
+                rowOrder[i].push(row[i][j]);
+              }else{
+                rowOrder[i].unshift(row[i][j]);
+              }
+              
+            }
+            
           }
+        
           
-         
-      }
-      console.log(counterRows);
-      console.log(row)
+      }//end for loop
+      console.log(rowOrder);
+      
+      
+      
       
      
      
