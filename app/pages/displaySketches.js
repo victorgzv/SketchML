@@ -118,9 +118,6 @@ export default class displaySketches extends React.Component {
     this.setState({
       sketches: a
     });
-    // sketches.map(data =>
-    //         console.log(data)
-    // );
   }
 }
 
