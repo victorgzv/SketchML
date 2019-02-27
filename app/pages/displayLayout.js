@@ -142,20 +142,20 @@ const styles = StyleSheet.create({
     },
     rows: {
       justifyContent: 'center',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
+      flexDirection: 'row',
       
    
    },
     input: {
        margin: 15,
        height: 40,
-       width: '30%',
+       flex:2,
        borderColor: 'black',
        borderWidth: 1,
        paddingLeft:5
     },
     label: {
+      flex:1,
         margin: 15
      }
  })
