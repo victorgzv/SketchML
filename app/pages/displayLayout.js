@@ -58,6 +58,15 @@ sortFunction(a, b) {
       return (a['y0'] < b['y0']) ? -1 : 1;
   }
 }
+//Function to sort bounding boxes by its minX coordinate
+sortXaxis(a, b) {
+  if (a['x0'] === b['x0']) {
+      return 0;
+  }
+  else {
+      return (a['x0'] < b['x0']) ? -1 : 1;
+  }
+}
 //This method returns information about the predicted bounding boxes and create code according to the type of object found
   onDataLoad = (querySnapshot) => {
     var elements =[];
@@ -95,9 +104,9 @@ sortFunction(a, b) {
           }    
       }//end for loop
       console.log("No. of rows: "+counterRows);
+      
       // console.log(row);
       let xCounter = 0;
-      
       var rowOrder=[];
       for(i=0;i<row.length;i++){//Iterates through all the rows 
         rowOrder[i]=[];
@@ -109,14 +118,15 @@ sortFunction(a, b) {
               // console.log(row[i][j]);
               console.log("There is only one elements on this row");
               rowOrder[i].push(row[i][j]);
-            }else{
+            }else if(row[i].length>1){
+              console.log(row[i][j]);
               if(row[i][j]['x0']>xCounter){
                 xCounter = row[i][j]['x0'];
                 rowOrder[i].push(row[i][j]);//add element at the end of the row array
               }else{
                 rowOrder[i].unshift(row[i][j]);//add element at the start of the row array
               }
-              
+              rowOrder[i]=rowOrder[i].sort(this.sortXaxis);//sort all elements on the x coordinate
             }
             
           }
