@@ -15,13 +15,38 @@ export default class Singup extends React.Component {
   componentWillUnmount() {
     unsubscribe= null;
   }
+  createLayout = () => {
+    let stack = this.state.widgets;
+    let layout=[];
+    for(i=0;i<stack.length;i++){//Iterates through all the rows 
+      console.log(stack[i]);
+      let uiElement=[];
+      for(j=0;j<stack[i].length;j++){//Iterates through all the columns of each row
+        //Each type of object will add an UI element to the array of elements
+          let objectType= stack[i][j]['object'];
+          if(objectType==="Textfield"){
+            uiElement.push( 
+                <TextInput style = {styles.input}
+                underlineColorAndroid = "transparent"
+                placeholderTextColor = "#9a73ef"
+                autoCapitalize = "none"
+                />
+            );
+          }else if(objectType==="Label"){
+            uiElement.push( <Text style = {styles.label}> Text</Text>);
+          }
+      }
+      layout.push(<View style={styles.rows}>{uiElement}</View>);
+    }
+    return layout
+  
+  }//end function
 
 render(){ 
 		return(
 			<View style={styles.container}>
-                  <Text > Layout: </Text>
-                    {this.state.widgets}
-  			</View>
+            {this.createLayout()}
+  		</View>
 			);
 }
 //Function to sort bounding boxes by its minY coordinate
@@ -36,8 +61,6 @@ sortFunction(a, b) {
 //This method returns information about the predicted bounding boxes and create code according to the type of object found
   onDataLoad = (querySnapshot) => {
     var elements =[];
-   
-    
     querySnapshot.forEach((doc) => {
       const predictions = doc.data().predictions;
       //Call to function sort by minY coordinate
@@ -46,23 +69,6 @@ sortFunction(a, b) {
       const imgWidth = doc.data().width;
       const imgHeight = doc.data().height;
       console.log(imgWidth,imgHeight);
-
-      for(i=0;i<predictions.length;i++){
-          //Each type of object will add an UI element to the array of elements
-          let objectType= predictions[i]['object'];
-          if(objectType==="Textfield"){
-            elements.push( 
-                <TextInput style = {styles.input}
-                underlineColorAndroid = "transparent"
-                placeholderTextColor = "#9a73ef"
-                autoCapitalize = "none"
-                />
-            );
-          }else if(objectType==="Label"){
-            elements.push( <Text style = {styles.label}> Your text goes here </Text>);
-          }
-      }
-
       let yCounter = 0;
       let counterRows = 0;
       var row = [];
@@ -92,7 +98,6 @@ sortFunction(a, b) {
       // console.log(row);
       let xCounter = 0;
       
-      var orderElements=[];
       var rowOrder=[];
       for(i=0;i<row.length;i++){//Iterates through all the rows 
         rowOrder[i]=[];
@@ -107,10 +112,9 @@ sortFunction(a, b) {
             }else{
               if(row[i][j]['x0']>xCounter){
                 xCounter = row[i][j]['x0'];
-                // console.log("the element on the most right is: "+row[i][j]['object']);
-                rowOrder[i].push(row[i][j]);
+                rowOrder[i].push(row[i][j]);//add element at the end of the row array
               }else{
-                rowOrder[i].unshift(row[i][j]);
+                rowOrder[i].unshift(row[i][j]);//add element at the start of the row array
               }
               
             }
@@ -119,17 +123,10 @@ sortFunction(a, b) {
         
           
       }//end for loop
-      console.log(rowOrder);
       
-      
-      
-      
-     
-     
-      
-      //Updating the state of widgets
+      // //Updating the state of widgets
       this.setState({
-        widgets: elements
+        widgets: rowOrder
       });  
       
       
@@ -137,15 +134,23 @@ sortFunction(a, b) {
   }
 }
 
-
-
 const styles = StyleSheet.create({
     container: {
-       paddingTop: 23
+      marginTop: 150,
+      justifyContent: 'center',
+      flexDirection: 'column'
     },
+    rows: {
+      justifyContent: 'center',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+      
+   
+   },
     input: {
        margin: 15,
        height: 40,
+       width: '30%',
        borderColor: 'black',
        borderWidth: 1,
        paddingLeft:5
