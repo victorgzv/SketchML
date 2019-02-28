@@ -6,14 +6,17 @@ import {
   View,
   Image,
   FlatList,
+  Alert
 } from 'react-native';
 import { List,ListItem } from "react-native-elements";
 import { Actions } from 'react-native-router-flux';
+import * as firebase from 'firebase';
 
 export default class displaySketches extends React.Component {
   unsubscribe = null;
   ref =  this.props.db.collection("sketches").where("from","==",this.props.email);
   state = {
+    sname:'',
     sketches: [],
     isEmpty: false
   };
@@ -30,6 +33,72 @@ export default class displaySketches extends React.Component {
   }
   showDetails = (name,email) =>{
     Actions.sketchProfile({sname:name,email:email});
+  }
+  //Function that gets the sketch's name and stores it on the state so it is accesible.
+  getSketchName(name){
+    this.setState({
+      sname: name
+    });
+  }
+  //Function that combines a call to other 2 functions
+  combinedFunction(name){
+    this.getSketchName(name);
+   //Alert modal that makes sure that the user wants to remove a sketch
+    Alert.alert(
+      'Remove '+ this.state.sname.replace(/_/g, " "),
+      'Are you sure you want to delete this sketch?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => this.removeSkecth()},
+      ],
+      {cancelable: false},
+    );
+  }
+  //Function that removes a sketch from the database and their corresponding images from cloud storage
+  removeSkecth = async () =>{
+    //References to the images stored in cloud storage
+    const originalImage = firebase.storage().ref().child(this.props.email+"/" + this.state.sname);
+    const predictedImage = firebase.storage().ref().child(this.props.email+"/" + this.state.sname +"-predicted");
+    //Call to db to get documents matching name and user
+    this.props.db.collection("sketches")
+    .where("name","==",this.state.sname).where("from","==",this.props.email)
+    .get()
+        .then(function(querySnapshot) {
+              querySnapshot.forEach(function(doc) {
+                console.log(querySnapshot.size); 
+                if(querySnapshot.size >0){
+                  //delete sketch
+                  console.log("Doc: " + doc.id);
+                  doc.ref.delete().then(function() {
+                    console.log("Document successfully deleted!");
+                  }).catch(function(error) {
+                    console.error("Error removing document: ", error);
+                  });
+                 
+                }   
+              }.bind(this));
+        }.bind(this))
+        .catch(function(error) {
+            console.log("Error getting documents:", error);
+        });;
+        //Delete original iand predicted image from cloud storage
+          await originalImage.delete().then(function() {
+            console.log("Object successfully deleted!");
+          }).catch(function(error) {
+            console.error("Error removing object: ", error);
+          });;
+          await predictedImage.delete().then(function() {
+            console.log("Object successfully deleted!");
+          }).catch(function(error) {
+            console.error("Error removing object: ", error);
+          });;
+        
+       
+
   }
 
   renderSeparator = () => {
@@ -71,6 +140,7 @@ export default class displaySketches extends React.Component {
                 <ListItem 
                   style={styles.listItem}
                   button onPress={() => {this.showDetails(item.name,this.props.email)}}
+                  onLongPress={() => {this.combinedFunction(item.name)}}
                   roundAvatar
                   title={`${item.name.replace(/_/g, " ")}`}
                   avatar={{ uri: item.original_img }}

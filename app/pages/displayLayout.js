@@ -111,11 +111,8 @@ sortXaxis(a, b) {
       for(i=0;i<row.length;i++){//Iterates through all the rows 
         rowOrder[i]=[];
           for(j=0;j<row[i].length;j++){//Iterates through all the columns of each row
-           
             //If a row only contains one element
             if(row[i].length===1){ 
-              // console.log("in_row: "+ i);
-              // console.log(row[i][j]);
               console.log("There is only one elements on this row");
               rowOrder[i].push(row[i][j]);
             }else if(row[i].length>1){
@@ -127,11 +124,8 @@ sortXaxis(a, b) {
                 rowOrder[i].unshift(row[i][j]);//add element at the start of the row array
               }
               rowOrder[i]=rowOrder[i].sort(this.sortXaxis);//sort all elements on the x coordinate
-            }
-            
-          }
-        
-          
+            } 
+          }          
       }//end for loop
       
       // //Updating the state of widgets
