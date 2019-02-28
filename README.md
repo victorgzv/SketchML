@@ -1,4 +1,4 @@
-# SkecthML
+# SketchML
 Final Year Project: 
 
 Writing front-end code is time-consuming. The objective of this Project is to transform mobile hand-drawn wireframes from a picture into digital layouts and front-end code that can be used as a starting point for mobile applications development. SketchML is a solution developed using React Native and powered by an Artificial intelligence model that has been trained to recognise multiple user interface elements such as buttons, text box and images.
