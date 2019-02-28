@@ -172,7 +172,6 @@ exports.startPrediction = functions.storage.object().onFinalize((event) => {
                 if (err) return console.error(err);
               });
               let predicted_img_url = "https://firebasestorage.googleapis.com/v0/b/" + fileBucket + "/o/" + encodeURIComponent(filePath + "-predicted") + "?alt=media&token=" + uuid;
-
               // Update document on Firestore
               imageRef
                 .where("name", "==", path.basename(filePath))

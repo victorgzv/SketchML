@@ -63,6 +63,7 @@ export default class displaySketches extends React.Component {
     //References to the images stored in cloud storage
     const originalImage = firebase.storage().ref().child(this.props.email+"/" + this.state.sname);
     const predictedImage = firebase.storage().ref().child(this.props.email+"/" + this.state.sname +"-predicted");
+    
     //Call to db to get documents matching name and user
     this.props.db.collection("sketches")
     .where("name","==",this.state.sname).where("from","==",this.props.email)
@@ -85,20 +86,27 @@ export default class displaySketches extends React.Component {
         .catch(function(error) {
             console.log("Error getting documents:", error);
         });;
-        //Delete original iand predicted image from cloud storage
-          await originalImage.delete().then(function() {
-            console.log("Object successfully deleted!");
+        //Delete original and predicted image from cloud storage
+        //Dowloadurl to find out if the image url still exists before downloading
+        await originalImage.getDownloadURL().then(function(url) {
+         if(url!=""){
+          originalImage.delete().then(function() {
+            console.log("Original Object successfully deleted!");
           }).catch(function(error) {
             console.error("Error removing object: ", error);
-          });;
-          await predictedImage.delete().then(function() {
-            console.log("Object successfully deleted!");
-          }).catch(function(error) {
-            console.error("Error removing object: ", error);
-          });;
-        
-       
+          });
+         }
+        });
 
+        await predictedImage.getDownloadURL().then(function(url) {
+          if(url!=""){
+           predictedImage.delete().then(function() {
+             console.log("Predicted Object successfully deleted!");
+           }).catch(function(error) {
+             console.error("Error removing object: ", error);
+           });
+          }
+         });
   }
 
   renderSeparator = () => {
