@@ -113,10 +113,10 @@ sortXaxis(a, b) {
           for(j=0;j<row[i].length;j++){//Iterates through all the columns of each row
             //If a row only contains one element
             if(row[i].length===1){ 
-              console.log("There is only one elements on this row");
+              // console.log("There is only one elements on this row");
               rowOrder[i].push(row[i][j]);
             }else if(row[i].length>1){
-              console.log(row[i][j]);
+              // console.log(row[i][j]);
               if(row[i][j]['x0']>xCounter){
                 xCounter = row[i][j]['x0'];
                 rowOrder[i].push(row[i][j]);//add element at the end of the row array
@@ -147,8 +147,6 @@ const styles = StyleSheet.create({
     rows: {
       justifyContent: 'center',
       flexDirection: 'row',
-      
-   
    },
     input: {
        margin: 15,
