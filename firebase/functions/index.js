@@ -8,7 +8,7 @@ const { google } = require('googleapis');
 const { Storage } = require('@google-cloud/storage');
 const projectId = 'sketchml';
 const UUID = require("uuid/v4");
-const beautify = require('js-beautify').js;
+const prettier = require("prettier");
 const codeGen = require('./code-gen.js');
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
@@ -76,7 +76,7 @@ function sortXaxis(a, b) {
       return (a['x0'] < b['x0']) ? -1 : 1;
   }
 }
-async function createLayoutFile(bucket,filePath,predictions) {
+async function createLayoutFile(fileBucket,bucket,filePath,predictions) {
   //Call to function sort by minY coordinate
   
   let sorted_predictions = predictions.sort(sortFunction);
@@ -149,24 +149,59 @@ async function createLayoutFile(bucket,filePath,predictions) {
             "placeholderTextColor = '#9a73ef' "+
             "autoCapitalize = 'none'/>\n";
             wstream.write(textfield);
-           
-          
+
           }else if(objectType==="Label"){
             console.log("LABEL");
             let label ="<Text style = {styles.label}> Text </Text>\n";
-            wstream.write(label);
-           
-          
+            wstream.write(label); 
           }
       }
       wstream.write("</View>\n");
     }
-    await wstream.write(codeGen.addclosingHeaders());
-    await wstream.write(codeGen.addStyles());
-    console.log("FILE'S CONTENT: "+ wstream );
+    wstream.write(codeGen.addclosingHeaders());
+    wstream.write(codeGen.addStyles());
+   
     await wstream.end();
+    // let savPath = '/tmp/'+ fileName + 'idented.js';
+    // let options = {
+    //     "arrowParens": "avoid",
+    //     "bracketSpacing": true,
+    //     "htmlWhitespaceSensitivity": "css",
+    //     "insertPragma": false,
+    //     "jsxBracketSameLine": false,
+    //     "jsxSingleQuote": false,
+    //     "parser": "babel",
+    //     "printWidth": 80,
+    //     "proseWrap": "preserve",
+    //     "requirePragma": false,
+    //     "semi": true,
+    //     "singleQuote": false,
+    //     "tabWidth": 2,
+    //     "trailingComma": "none",
+    //     "useTabs": false 
+    // }
+    // let formatted="";
+    // let file2 = '/tmp/'+ fileName + '2.js';
+    // fs.readFile(file,'utf8',function (err, data) {
+    //   if (err) {
+    //       throw err;
+    //   } 
+       
+    //     formatted = prettier.format(data, options); 
+    //     console.log("FORMATTED: " + formatted);
+    //     let wstream2 = fs.createWriteStream(file2);
+    //     wstream2.write(formatted);
+    //     wstream2.end();  
+    // });
+   
+    
+    // fs.writeFile (file2, formatted, function(err) {
+    //   if (err) throw err;
+    //   console.log('complete');
+    // });
  
   //Upload code file to cloud storage
+  let uuid = UUID();
   await bucket.upload(file, {
     destination: filePath + "-code.js",
     metadata: {
@@ -174,11 +209,31 @@ async function createLayoutFile(bucket,filePath,predictions) {
       // Use only if the contents of the file will never change
       contentType: 'text/javascript',
       cacheControl: 'public, max-age=31536000',
+      firebaseStorageDownloadTokens: uuid
     },
   }, (err, file) => {
     if (err) return console.error(err);
     return console.log("Successfully uploaded code to bucket.");
   });
+  
+  let code_url = "https://firebasestorage.googleapis.com/v0/b/" + fileBucket + "/o/" + encodeURIComponent(filePath + "-code.js") + "?alt=media&token=" + uuid;
+  if (code_url !== null){
+     // Update document on Firestore
+     let addCodeFile =  db.collection('sketches');
+     addCodeFile.where("name", "==", path.basename(filePath)).where("from", "==", path.dirname(filePath)).get()
+     .then((querySnapshot) => {
+       querySnapshot.forEach((doc) => {
+         if (querySnapshot.size > 0) {
+          addCodeFile.doc(doc.id).update({ code_url: code_url }, { merge: true });
+         }
+       });
+       return true;
+     })
+     .catch((error) => {
+       console.log("Error getting documents:", error);
+       return error;
+     });
+  }
 }
 
 exports.startPrediction = functions.storage.object().onFinalize((event) => {
@@ -321,7 +376,7 @@ exports.startPrediction = functions.storage.object().onFinalize((event) => {
                   console.log("Error getting documents:", error);
                   return error;
                 });
-                createLayoutFile(bucket,filePath,arrayOfElements);
+                createLayoutFile(fileBucket,bucket,filePath,arrayOfElements);
                 
               resolve(destination);
             }
