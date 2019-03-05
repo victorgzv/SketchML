@@ -10,13 +10,15 @@ import { Dimensions } from 'react-native'
 import Image from 'react-native-scalable-image';
 import { DotIndicator} from 'react-native-indicators';
 
+
 export default class Singup extends React.Component {
   unsubscribe = null;
   ref =  this.props.db.collection("sketches").where("name", "==", this.props.sname).where("from","==",this.props.email);
   state = {
     isLoading: true,
     isEmpty:true,
-    predicted_image: ''
+    predicted_image: '',
+    codeUrl: ''
   }
   componentDidMount(){
     unsubscribe = this.ref.onSnapshot(this.onImageLoad);
@@ -32,6 +34,7 @@ export default class Singup extends React.Component {
 	render(){
     const animating = this.state.isLoading;
     const empty = this.state.isEmpty;
+    const codeUrl = this.state.codeUrl;
 		return(
 			<View style={styles.container}>
              {animating ? (
@@ -55,6 +58,15 @@ export default class Singup extends React.Component {
                     <TouchableOpacity style={styles.button} onPress={this.displayLayout}>
                       <Text style={styles.buttonText}>Preview Layout</Text>
                     </TouchableOpacity> 
+                    {
+                      codeUrl !== undefined ? (
+                      <TouchableOpacity style={styles.button} >
+                        <Text style={styles.buttonText}>Download code</Text>
+                      </TouchableOpacity> 
+                      ):(
+                        <Text>No code available</Text>
+                      )
+                    }
                 </View>
               )}
               </View>
@@ -66,6 +78,8 @@ export default class Singup extends React.Component {
   onImageLoad = (querySnapshot) => {
     querySnapshot.forEach((doc) => {
       const predicted_img = doc.data().predicted_url;
+      const code_url = doc.data().code_url;
+      console.log("code_url: " + code_url);
       if(doc.data().num_predictions==0){
         this.setState({
           isLoading: false
@@ -74,6 +88,7 @@ export default class Singup extends React.Component {
         if(predicted_img !=""){
           this.setState({
             predicted_image: predicted_img,
+            codeUrl: code_url,
             isLoading: false,
             isEmpty: false
           });
