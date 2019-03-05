@@ -8,6 +8,8 @@ const { google } = require('googleapis');
 const { Storage } = require('@google-cloud/storage');
 const projectId = 'sketchml';
 const UUID = require("uuid/v4");
+const beautify = require('js-beautify').js;
+const codeGen = require('./code-gen.js');
 admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 
@@ -56,6 +58,128 @@ function resizeImg(filepath) {
     });
   });
 }
+//Function to sort bounding boxes by its minY coordinate
+function sortFunction(a, b) {
+  if (a['y0'] === b['y0']) {
+      return 0;
+  }
+  else {
+      return (a['y0'] < b['y0']) ? -1 : 1;
+  }
+}
+//Function to sort bounding boxes by its minX coordinate
+function sortXaxis(a, b) {
+  if (a['x0'] === b['x0']) {
+      return 0;
+  }
+  else {
+      return (a['x0'] < b['x0']) ? -1 : 1;
+  }
+}
+async function createLayoutFile(bucket,filePath,predictions) {
+  //Call to function sort by minY coordinate
+  
+  let sorted_predictions = predictions.sort(sortFunction);
+  let yCounter = 0;
+      let counterRows = 0;
+      var row = [];
+      
+      //For loop to iterate through sorted elements. It calculates the number of rows and the elements that are part of the rows.
+      for( i=0;i<sorted_predictions.length;i++){
+          row [counterRows] = [];//Creates a 2D array for each row
+          if(sorted_predictions[i]['y0']>yCounter){
+            counterRows++;
+            yCounter = sorted_predictions[i]['y0'] +sorted_predictions[i]['height']
+      
+            if(sorted_predictions[i]['y0']<yCounter){
+              console.log("Element "+ sorted_predictions[i]['object']+" is in row: " + (counterRows-1));
+              let position = (counterRows-1);
+             row[position].push(sorted_predictions[i]);  
+            }
+          }else{
+            if(sorted_predictions[i]['y0']<yCounter){
+              console.log("Element "+ sorted_predictions[i]['object']+" is in row: " + (counterRows-1));
+              let position = (counterRows-1);
+               row[position].push(sorted_predictions[i]);
+            }
+            continue;
+          }    
+      }//end for loop
+      console.log("No. of rows: "+counterRows);
+      
+      // console.log(row);
+      let xCounter = 0;
+      var rowOrder=[];
+      for(i=0;i<row.length;i++){//Iterates through all the rows 
+        rowOrder[i]=[];
+          for( j=0;j<row[i].length;j++){//Iterates through all the columns of each row
+            //If a row only contains one element
+            if(row[i].length===1){ 
+              // console.log("There is only one elements on this row");
+               rowOrder[i].push(row[i][j]);
+            }else if(row[i].length>1){
+              // console.log(row[i][j]);
+              if(row[i][j]['x0']>xCounter){
+                xCounter = row[i][j]['x0'];
+                 rowOrder[i].push(row[i][j]);//add element at the end of the row array
+              }else{
+                 rowOrder[i].unshift(row[i][j]);//add element at the start of the row array
+              }
+              rowOrder[i]=rowOrder[i].sort(sortXaxis);//sort all elements on the x coordinate
+            } 
+          }          
+      }//end for loop
+      
+    let fileName = path.basename(filePath);
+    let file = '/tmp/'+ fileName + '.js';
+    let wstream = fs.createWriteStream(file);
+    wstream.write(codeGen.addImports());
+    wstream.write(codeGen.addopeningHeaders());
+    for(i=0;i<rowOrder.length;i++){//Iterates through all the rows 
+    
+      wstream.write("<View style={styles.rows}>\n");
+      for(j=0;j<rowOrder[i].length;j++){//Iterates through all the columns of each row
+        //Each type of object will add an UI element to the array of elements
+          let objectType= rowOrder[i][j]['object'];
+          if(objectType==="Textfield"){
+            console.log("TEXTFIELD");
+            
+            let textfield="<TextInput style = {styles.input} "+
+            "underlineColorAndroid = 'transparent' "+
+            "placeholderTextColor = '#9a73ef' "+
+            "autoCapitalize = 'none'/>\n";
+            wstream.write(textfield);
+           
+          
+          }else if(objectType==="Label"){
+            console.log("LABEL");
+            let label ="<Text style = {styles.label}> Text </Text>\n";
+            wstream.write(label);
+           
+          
+          }
+      }
+      wstream.write("</View>\n");
+    }
+    await wstream.write(codeGen.addclosingHeaders());
+    await wstream.write(codeGen.addStyles());
+    console.log("FILE'S CONTENT: "+ wstream );
+    await wstream.end();
+ 
+  //Upload code file to cloud storage
+  await bucket.upload(file, {
+    destination: filePath + "-code.js",
+    metadata: {
+      // Enable long-lived HTTP caching headers
+      // Use only if the contents of the file will never change
+      contentType: 'text/javascript',
+      cacheControl: 'public, max-age=31536000',
+    },
+  }, (err, file) => {
+    if (err) return console.error(err);
+    return console.log("Successfully uploaded code to bucket.");
+  });
+}
 
 exports.startPrediction = functions.storage.object().onFinalize((event) => {
 
@@ -74,8 +198,12 @@ exports.startPrediction = functions.storage.object().onFinalize((event) => {
   const file = bucket.file(filePath);
   const dirName = path.dirname(filePath);
 
-  if (path.basename(filePath).endsWith('-predicted')) {
-    console.log('File already exists. Exiting ...');
+  if (path.basename(filePath).endsWith('-predicted') ) {
+    console.log('Files already exists. Exiting ...');
+    return;
+  }
+  if (path.basename(filePath).endsWith('-code.js')) {
+    console.log('Files already exists. Exiting ...');
     return;
   }
   if (filePath.startsWith(dirName)) {
@@ -138,7 +266,7 @@ exports.startPrediction = functions.storage.object().onFinalize((event) => {
       if (num_predictions > 0) {
 
 
-        fs.writeFile('/tmp/rect.txt', data, function (err, data) {
+        fs.writeFile('/tmp/rect.txt', data, (err, data) => {
           if (err) console.log(err);
           console.log("Successfully Written to File.");
         });
@@ -170,30 +298,31 @@ exports.startPrediction = functions.storage.object().onFinalize((event) => {
                 }
               }, (err, file) => {
                 if (err) return console.error(err);
+                return console.log("succesfully uploaded!");
               });
               let predicted_img_url = "https://firebasestorage.googleapis.com/v0/b/" + fileBucket + "/o/" + encodeURIComponent(filePath + "-predicted") + "?alt=media&token=" + uuid;
               // Update document on Firestore
-              imageRef
-                .where("name", "==", path.basename(filePath))
-                .where("from", "==", path.dirname(filePath))
-                .get()
-                .then(function (querySnapshot) {
-                  querySnapshot.forEach(function (doc) {
+              imageRef.where("name", "==", path.basename(filePath)).where("from", "==", path.dirname(filePath)).get()
+                .then((querySnapshot) => {
+                  querySnapshot.forEach((doc) => {
                     console.log(querySnapshot.size);
                     if (querySnapshot.size > 0) {
                       console.log(doc.id, " => ", doc.data());
-                      imageRef.doc(doc.id).update({ num_predictions: num_predictions, predicted_url: predicted_img_url, width: dimensions.width, height: dimensions.height, predictions: arrayOfElements }, { merge: true });
-
+                      imageRef.doc(doc.id).update({ num_predictions: num_predictions, 
+                                                    predicted_url: predicted_img_url, 
+                                                    width: dimensions.width, 
+                                                    height: dimensions.height, 
+                                                    predictions: arrayOfElements }, { merge: true });
                     }
-                  }.bind(this));
+                  });
                   return true;
                 })
-                .catch(function (error) {
+                .catch((error) => {
                   console.log("Error getting documents:", error);
                   return error;
                 });
-
-
+                createLayoutFile(bucket,filePath,arrayOfElements);
+                
               resolve(destination);
             }
           });
@@ -205,25 +334,23 @@ exports.startPrediction = functions.storage.object().onFinalize((event) => {
           .where("name", "==", path.basename(filePath))
           .where("from", "==", path.dirname(filePath))
           .get()
-          .then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
               console.log(querySnapshot.size);
               if (querySnapshot.size > 0) {
                 console.log(doc.id, " => ", doc.data());
                 imageRef.doc(doc.id).update({ num_predictions: num_predictions }, { merge: true });
 
               }
-            }.bind(this));
+            });
             return true;
           })
-          .catch(function (error) {
+          .catch((error) => {
             console.log("Error getting documents:", error);
             return error;
           });
         return console.log("No objects were found");
       }
     })
-  } else {
-    return 'not a new image';
   }
 });

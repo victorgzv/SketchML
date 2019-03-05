@@ -16,6 +16,7 @@
     "firebase-functions": "^2.2.0",
     "googleapis": "^37.2.0",
     "image-size": "^0.7.2",
+    "js-beautify": "^1.9.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
