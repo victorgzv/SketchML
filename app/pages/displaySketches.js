@@ -63,7 +63,7 @@ export default class displaySketches extends React.Component {
     //References to the images stored in cloud storage
     const originalImage = firebase.storage().ref().child(this.props.email+"/" + this.state.sname);
     const predictedImage = firebase.storage().ref().child(this.props.email+"/" + this.state.sname +"-predicted");
-    
+    const codeFile = firebase.storage().ref().child(this.props.email+"/" + this.state.sname +"-code.js");
     //Call to db to get documents matching name and user
     this.props.db.collection("sketches")
     .where("name","==",this.state.sname).where("from","==",this.props.email)
@@ -102,6 +102,16 @@ export default class displaySketches extends React.Component {
           if(url!=""){
            predictedImage.delete().then(function() {
              console.log("Predicted Object successfully deleted!");
+           }).catch(function(error) {
+             console.error("Error removing object: ", error);
+           });
+          }
+         });
+
+         await codeFile.getDownloadURL().then(function(url) {
+          if(url!=""){
+            codeFile.delete().then(function() {
+             console.log("Code File successfully deleted!");
            }).catch(function(error) {
              console.error("Error removing object: ", error);
            });

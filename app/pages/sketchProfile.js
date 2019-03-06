@@ -4,12 +4,12 @@ import {
   StyleSheet,
   View,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Linking
 } from 'react-native';
 import { Dimensions } from 'react-native'
 import Image from 'react-native-scalable-image';
 import { DotIndicator} from 'react-native-indicators';
-
 
 export default class Singup extends React.Component {
   unsubscribe = null;
@@ -30,6 +30,15 @@ export default class Singup extends React.Component {
     let sname=this.props.sname;
     let email = this.props.email;
     Actions.displayLayout({email:email,sname:sname});
+  }
+  downloadFile=()=>{
+    Linking.openURL(this.state.codeUrl);
+    // FileSystem.downloadAsync(this.state.codeUrl, FileSystem.documentDirectory + 'newfile.js').then(({ uri }) => {
+    //   console.log('Finished downloading to ', uri);
+    // })
+    // .catch(error => {
+    //   console.error(error);
+    // });;
   }
 	render(){
     const animating = this.state.isLoading;
@@ -60,7 +69,7 @@ export default class Singup extends React.Component {
                     </TouchableOpacity> 
                     {
                       codeUrl !== undefined ? (
-                      <TouchableOpacity style={styles.button} >
+                      <TouchableOpacity style={styles.button} onPress={this.downloadFile}>
                         <Text style={styles.buttonText}>Download code</Text>
                       </TouchableOpacity> 
                       ):(
