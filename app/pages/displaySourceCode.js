@@ -1,22 +1,49 @@
 import React from 'react';
-import {StyleSheet,View,Text,TouchableOpacity,TextInput} from 'react-native';
+import {StyleSheet,View,Text,ScrollView,ActivityIndicator} from 'react-native';
+
 import * as firebase from 'firebase';
 
 export default class Singup extends React.Component {
-
-  state = {
-   code:''
-  }
+state = {
+code:'',
+loading:true
+}
   componentDidMount(){
+    const ref = firebase.storage().ref().child(this.props.email + "/" + this.props.sname +"-code.js");
+    const that = this;
+    ref.getDownloadURL().then(function(data) {
+     
+        fetch(data)
+        .then(function(response) {
+          response.text().then(function(text) {
+            that.setState({ code: text,
+                            loading: false
+                          });
+          });
+        });
+      }).catch(function(error) {
+          console.log(error);
+      });
   }
   componentWillUnmount() {
   
   }
-  createLayout = () => {}
-    render(){ 
+  
+    render(){
+        const isLoading = this.state.loading;
             return(
                 <View style={styles.container}>
-                  <Text>Hi there!</Text>
+                {isLoading ? (
+                   	<View >
+                      <ActivityIndicator size="large" color="#66BB6A" />
+                    </View>
+                ) : (
+                    <ScrollView>
+                        <Text
+                        selectable={true} 
+                        >{this.state.code}</Text>
+                    </ScrollView>
+                )}
                 </View>
                 );
     }//end of render method
@@ -25,24 +52,8 @@ export default class Singup extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-      marginTop: 150,
+      backgroundColor: '#FAFAFA',
       justifyContent: 'center',
       flexDirection: 'column'
-    },
-    rows: {
-      justifyContent: 'center',
-      flexDirection: 'row',
-   },
-    input: {
-       margin: 15,
-       height: 40,
-       flex:2,
-       borderColor: 'black',
-       borderWidth: 1,
-       paddingLeft:5
-    },
-    label: {
-      flex:1,
-        margin: 15
-     }
+    }
  })
