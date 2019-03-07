@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {StyleSheet,View,Text,TouchableOpacity,TextInput} from 'react-native';
 
 export default class Singup extends React.Component {
