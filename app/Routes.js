@@ -7,6 +7,7 @@ import Sketch from './pages/Sketch';
 import ListSketches from './pages/displaySketches';
 import SketchProfile from './pages/sketchProfile';
 import DisplayLayout from './pages/displayLayout';
+import DisplaySourceCode from './pages/displaySourceCode';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import {config,settings} from './FirebaseConfig'; 
@@ -25,10 +26,11 @@ export default class Routes extends React.Component {
                     <Scene key="landing" component={Landing} db ={firestore} hideNavBar={false} />
                     <Scene key="sketchProfile" component={SketchProfile} db ={firestore} title="sketchProfile" />
                     <Scene key="displayLayout" component={DisplayLayout} db ={firestore} title="displayLayout" />
+                    <Scene key="displaySourceCode" component={DisplaySourceCode} db ={firestore} title="displaySourceCode" />
                 </Stack>
             </Router>
         )
     }
-
+    
 }
 

@@ -10,7 +10,7 @@ import {
 import { Dimensions } from 'react-native'
 import Image from 'react-native-scalable-image';
 import { DotIndicator} from 'react-native-indicators';
-import * as firebase from 'firebase';
+
 
 export default class Singup extends React.Component {
   unsubscribe = null;
@@ -32,38 +32,11 @@ export default class Singup extends React.Component {
     let email = this.props.email;
     Actions.displayLayout({email:email,sname:sname});
   }
-  downloadFile=()=>{
+  displayCode=()=>{
     // Linking.openURL(this.state.codeUrl);
-    const ref = firebase.storage().ref().child(this.props.email + "/" + this.props.sname +"-code.js");
-    let options = {
-        "arrowParens": "avoid",
-        "bracketSpacing": true,
-        "htmlWhitespaceSensitivity": "css",
-        "insertPragma": false,
-        "jsxBracketSameLine": false,
-        "jsxSingleQuote": false,
-        "parser": "babel",
-        "printWidth": 80,
-        "proseWrap": "preserve",
-        "requirePragma": false,
-        "semi": true,
-        "singleQuote": false,
-        "tabWidth": 2,
-        "trailingComma": "none",
-        "useTabs": false 
-    }
-    ref.getDownloadURL().then(function(data) {
-      // `url` is the download URL for 'images/stars.jpg'
-      fetch(data)
-      .then(function(response) {
-        response.text().then(function(text) {
-          console.log(text);
-          
-        });
-      });
-    }).catch(function(error) {
-      // Handle any errors
-    });
+    let sname=this.props.sname;
+    let email = this.props.email;
+    Actions.displaySourceCode({email:email,sname:sname});
   }
 	render(){
     const animating = this.state.isLoading;
@@ -94,8 +67,8 @@ export default class Singup extends React.Component {
                     </TouchableOpacity> 
                     {
                       codeUrl !== undefined ? (
-                      <TouchableOpacity style={styles.button} onPress={this.downloadFile}>
-                        <Text style={styles.buttonText}>Download code</Text>
+                      <TouchableOpacity style={styles.button} onPress={this.displayCode}>
+                        <Text style={styles.buttonText}>Display Source Code</Text>
                       </TouchableOpacity> 
                       ):(
                         <Text>No code available</Text>
