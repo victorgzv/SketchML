@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {Actions} from 'react-native-router-flux';
 import {
   StyleSheet,
@@ -36,7 +36,8 @@ export default class Singup extends React.Component {
     // Linking.openURL(this.state.codeUrl);
     let sname=this.props.sname;
     let email = this.props.email;
-    Actions.displaySourceCode({email:email,sname:sname});
+    let url = this.state.codeUrl;
+    Actions.displaySourceCode({email:email,sname:sname,fileUrl:url});
   }
 	render(){
     const animating = this.state.isLoading;
@@ -86,7 +87,6 @@ export default class Singup extends React.Component {
     querySnapshot.forEach((doc) => {
       const predicted_img = doc.data().predicted_url;
       const code_url = doc.data().code_url;
-      console.log("code_url: " + code_url);
       if(doc.data().num_predictions==0){
         this.setState({
           isLoading: false

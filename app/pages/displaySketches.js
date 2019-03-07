@@ -140,7 +140,7 @@ export default class displaySketches extends React.Component {
          	<View style={styles.img_container}>
               <Image 
                     style={styles.no_results}
-                    source={require('../images/no_results_found.png')} 
+                    source={require('../assets/no_results_found.png')} 
               />
               <TouchableOpacity style={styles.button} onPress={this.newSkecth}>
                   <Text style={styles.buttonText}>Create Sketch</Text>
