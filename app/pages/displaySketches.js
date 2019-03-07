@@ -148,7 +148,7 @@ export default class displaySketches extends React.Component {
          	</View>
         ) : (
      
-          <List style={styles.list} containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+          <List style={styles.list} containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 ,marginTop: 0}}>
           
             <FlatList 
               data={this.state.sketches}
@@ -228,8 +228,7 @@ const styles = StyleSheet.create({
     borderRadius: 75
   },
   list:{
-    backgroundColor: '#9ACD32',
-    marginVertical:50
+    backgroundColor: '#9ACD32'
   }, 
   button: {
     width:300,
