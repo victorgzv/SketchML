@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2014-present, Facebook, Inc. All rights reserved.
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
@@ -12,7 +12,7 @@ const React = require('react');
 const ReactTestRenderer = require('react-test-renderer');
 const leftPad = require('left-pad');
 const prettyFormat = require('../build');
-const ReactTestComponent = require('../build/plugins/react_test_component');
+const ReactTestComponent = require('../build/plugins/ReactTestComponent');
 const worldGeoJson = require('./world.geo.json');
 
 const NANOSECONDS = 1000000000;
@@ -54,20 +54,20 @@ function test(name, value, ignoreResult, prettyFormatOpts) {
     prettyFormat(value, prettyFormatOpts),
   );
 
-  const inspected = testCase('util.inspect()  ', () => {
-    return util.inspect(value, {
+  const inspected = testCase('util.inspect()  ', () =>
+    util.inspect(value, {
       depth: null,
       showHidden: true,
-    });
-  });
+    }),
+  );
 
-  const stringified = testCase('JSON.stringify()', () => {
-    return JSON.stringify(value, null, '  ');
-  });
+  const stringified = testCase('JSON.stringify()', () =>
+    JSON.stringify(value, null, '  '),
+  );
 
-  const results = [formatted, inspected, stringified].sort((a, b) => {
-    return a.time - b.time;
-  });
+  const results = [formatted, inspected, stringified].sort(
+    (a, b) => a.time - b.time,
+  );
 
   const winner = results[0];
 

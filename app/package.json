@@ -13,6 +13,7 @@
     "expo": "^31.0.2",
     "expo-firebase-firestore": "^1.0.0-rc.5",
     "firebase": "^5.7.0",
+    "pretty-format": "^24.3.1",
     "react": "16.5.0",
     "react-loader-spinner": "^2.3.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
