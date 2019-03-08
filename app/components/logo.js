@@ -11,7 +11,7 @@ export default class Logo extends React.Component{
 		return(
 			<View style={styles.container}>
 				<Image  style={{width:70, height: 70}}
-          			source={require('../assets/s_logo.png')}/>
+          			source={require('../assets/icon.png')}/>
           		<Text style={styles.logoText}>Sketch ML</Text>	
   			</View>
 			)

@@ -1,42 +1,42 @@
-const imports = "import React from 'react';\n"
-               +"import {StyleSheet,View,Text,TextInput} from 'react-native';\n";
+const imports = "import React from 'react';"
+               +"import {StyleSheet,View,Text,TextInput} from 'react-native';";
 
-const opening_headers = "export default class GeneratedLayout extends React.Component {\n"
-                        +"componentDidMount(){}\n"
-                        +"componentWillUnmount(){}\n"
-                        +"render(){ \n"
-                        +"return(\n"
-                        +"<View style={styles.container}>\n";
+const opening_headers = "export default class GeneratedLayout extends React.Component {"
+                        +"componentDidMount(){}"
+                        +"componentWillUnmount(){}"
+                        +"render(){"
+                        +"return("
+                        +"<View style={styles.container}>";
 
-const closing_headers = "</View>\n"
-                        +");\n"
-                        +"}\n"
-                        +"}\n";
+const closing_headers = "</View>"
+                        +");"
+                        +"}"
+                        +"}";
 
 
-const styles ="const styles = StyleSheet.create({\n"
-            +"container: {\n"
-            +"marginTop: 150,\n"
-            +"justifyContent: 'center',\n"
-            +"flexDirection: 'column'\n"
-            +"},\n"
-            +"rows: {\n"
-            +"justifyContent: 'center',\n"
-            +"flexDirection: 'row',\n"
-            +"},\n"
-            +"input: {\n"
-            +"margin: 15,\n"
-            +"height: 40,\n"
-            +"flex:2,\n"
-            +"borderColor: 'black',\n"
-            +"borderWidth: 1,\n"
-            +"paddingLeft:5\n"
-            +"},\n"
-            +"label: {\n"
-            +"flex:1,\n"
-            +"margin: 15\n"
-            +"}\n"
-            +"})\n";
+const styles ="const styles = StyleSheet.create({"
+            +"container: {"
+            +"marginTop: 150,"
+            +"justifyContent: 'center',"
+            +"flexDirection: 'column'"
+            +"},"
+            +"rows: {"
+            +"justifyContent: 'center',"
+            +"flexDirection: 'row',"
+            +"},"
+            +"input: {"
+            +"margin: 15,"
+            +"height: 40,"
+            +"flex:2,"
+            +"borderColor: 'black',"
+            +"borderWidth: 1,"
+            +"paddingLeft:5"
+            +"},"
+            +"label: {"
+            +"flex:1,"
+            +"margin: 15"
+            +"}"
+            +"})";
 
 module.exports = {
     addImports: function() {

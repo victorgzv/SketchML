@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 const exec = require('child_process').exec;
 const admin = require('firebase-admin');
 const path = require('path');
-const fs = require('fs');
+const fs = require('file-system');
 const sizeOf = require('image-size');
 const { google } = require('googleapis');
 const { Storage } = require('@google-cloud/storage');
@@ -137,7 +137,7 @@ async function createLayoutFile(fileBucket,bucket,filePath,predictions) {
     wstream.write(codeGen.addopeningHeaders());
     for(i=0;i<rowOrder.length;i++){//Iterates through all the rows 
     
-      wstream.write("<View style={styles.rows}>\n");
+      wstream.write("<View style={styles.rows}>");
       for(j=0;j<rowOrder[i].length;j++){//Iterates through all the columns of each row
         //Each type of object will add an UI element to the array of elements
           let objectType= rowOrder[i][j]['object'];
@@ -147,62 +147,51 @@ async function createLayoutFile(fileBucket,bucket,filePath,predictions) {
             let textfield="<TextInput style = {styles.input} "+
             "underlineColorAndroid = 'transparent' "+
             "placeholderTextColor = '#9a73ef' "+
-            "autoCapitalize = 'none'/>\n";
+            "autoCapitalize = 'none'/>";
             wstream.write(textfield);
 
           }else if(objectType==="Label"){
             console.log("LABEL");
-            let label ="<Text style = {styles.label}> Text </Text>\n";
+            let label ="<Text style = {styles.label}> Text </Text>";
             wstream.write(label); 
           }
       }
-      wstream.write("</View>\n");
-    }
+      wstream.write("</View>");
+    }//end for loop
     wstream.write(codeGen.addclosingHeaders());
     wstream.write(codeGen.addStyles());
    
-    await wstream.end();
-    // let savPath = '/tmp/'+ fileName + 'idented.js';
-    // let options = {
-    //     "arrowParens": "avoid",
-    //     "bracketSpacing": true,
-    //     "htmlWhitespaceSensitivity": "css",
-    //     "insertPragma": false,
-    //     "jsxBracketSameLine": false,
-    //     "jsxSingleQuote": false,
-    //     "parser": "babel",
-    //     "printWidth": 80,
-    //     "proseWrap": "preserve",
-    //     "requirePragma": false,
-    //     "semi": true,
-    //     "singleQuote": false,
-    //     "tabWidth": 2,
-    //     "trailingComma": "none",
-    //     "useTabs": false 
-    // }
-    // let formatted="";
-    // let file2 = '/tmp/'+ fileName + '2.js';
-    // fs.readFile(file,'utf8',function (err, data) {
-    //   if (err) {
-    //       throw err;
-    //   } 
-       
-    //     formatted = prettier.format(data, options); 
-    //     console.log("FORMATTED: " + formatted);
-    //     let wstream2 = fs.createWriteStream(file2);
-    //     wstream2.write(formatted);
-    //     wstream2.end();  
-    // });
-   
+    wstream.end();
+    let options = {
+        "arrowParens": "avoid",
+        "bracketSpacing": true,
+        "htmlWhitespaceSensitivity": "css",
+        "insertPragma": false,
+        "jsxBracketSameLine": false,
+        "jsxSingleQuote": false,
+        "parser": "babel",
+        "printWidth": 80,
+        "proseWrap": "preserve",
+        "requirePragma": false,
+        "semi": true,
+        "singleQuote": false,
+        "tabWidth": 2,
+        "trailingComma": "none",
+        "useTabs": false 
+    }
     
-    // fs.writeFile (file2, formatted, function(err) {
-    //   if (err) throw err;
-    //   console.log('complete');
-    // });
- 
+    fs.readFile(file,'utf8',(err, data) => {
+      if (err) throw err;
+      console.log('---complete---');
+       fs.writeFile(file, prettier.format(data,opt), (err)  => {
+          if (err) throw err;
+          console.log('complete');
+      });
+  });
+
   //Upload code file to cloud storage
-  let uuid = UUID();
-  await bucket.upload(file, {
+    let uuid = UUID();
+    await  bucket.upload(file, {
     destination: filePath + "-code.js",
     metadata: {
       // Enable long-lived HTTP caching headers
