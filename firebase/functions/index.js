@@ -2,7 +2,7 @@ const functions = require('firebase-functions');
 const exec = require('child_process').exec;
 const admin = require('firebase-admin');
 const path = require('path');
-const fs = require('file-system');
+const fs = require('fs');
 const sizeOf = require('image-size');
 const { google } = require('googleapis');
 const { Storage } = require('@google-cloud/storage');
@@ -107,7 +107,6 @@ async function createLayoutFile(fileBucket,bucket,filePath,predictions) {
       }//end for loop
       console.log("No. of rows: "+counterRows);
       
-      // console.log(row);
       let xCounter = 0;
       var rowOrder=[];
       for(i=0;i<row.length;i++){//Iterates through all the rows 
@@ -129,15 +128,14 @@ async function createLayoutFile(fileBucket,bucket,filePath,predictions) {
             } 
           }          
       }//end for loop
-      
+   
     let fileName = path.basename(filePath);
     let file = '/tmp/'+ fileName + '.js';
-    let wstream = fs.createWriteStream(file);
-    wstream.write(codeGen.addImports());
-    wstream.write(codeGen.addopeningHeaders());
+    let concatenate="";
+    concatenate +=codeGen.addImports();
+    concatenate +=codeGen.addopeningHeaders();
     for(i=0;i<rowOrder.length;i++){//Iterates through all the rows 
-    
-      wstream.write("<View style={styles.rows}>");
+      concatenate +="<View style={styles.rows}>";
       for(j=0;j<rowOrder[i].length;j++){//Iterates through all the columns of each row
         //Each type of object will add an UI element to the array of elements
           let objectType= rowOrder[i][j]['object'];
@@ -148,20 +146,20 @@ async function createLayoutFile(fileBucket,bucket,filePath,predictions) {
             "underlineColorAndroid = 'transparent' "+
             "placeholderTextColor = '#9a73ef' "+
             "autoCapitalize = 'none'/>";
-            wstream.write(textfield);
+            concatenate +=textfield;
 
           }else if(objectType==="Label"){
             console.log("LABEL");
             let label ="<Text style = {styles.label}> Text </Text>";
-            wstream.write(label); 
+            concatenate += label;
           }
       }
-      wstream.write("</View>");
+      concatenate +="</View>";
     }//end for loop
-    wstream.write(codeGen.addclosingHeaders());
-    wstream.write(codeGen.addStyles());
-   
-    wstream.end();
+    
+    concatenate +=codeGen.addclosingHeaders();
+    concatenate +=codeGen.addStyles();
+
     let options = {
         "arrowParens": "avoid",
         "bracketSpacing": true,
@@ -180,13 +178,10 @@ async function createLayoutFile(fileBucket,bucket,filePath,predictions) {
         "useTabs": false 
     }
     
-    fs.readFile(file,'utf8',(err, data) => {
+    fs.writeFile(file, prettier.format(concatenate,options), function(err) {
       if (err) throw err;
-      console.log('---complete---');
-       fs.writeFile(file, prettier.format(data,opt), (err)  => {
-          if (err) throw err;
-          console.log('complete');
-      });
+    
+      console.log('complete');
   });
 
   //Upload code file to cloud storage
