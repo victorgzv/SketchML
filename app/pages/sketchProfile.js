@@ -59,7 +59,9 @@ export default class Singup extends React.Component {
                 <View style={styles.container}>
                     <Text > Sketch: {this.props.sname.replace(/_/g, " ")}</Text>
                     <Image
-                    width={Dimensions.get('window').width} // height will be calculated automatically
+                    width={Dimensions.get('window').width+50}
+                    height={(Dimensions.get('window').height)-320}
+                    // height will be calculated automatically
                     source={{uri: this.state.predicted_image}}
                     /> 
                     <Text >{this.state.imageStatus}</Text> 
@@ -116,7 +118,7 @@ const styles = StyleSheet.create({
     width:300,
     backgroundColor:'#66BB6A',
     borderRadius: 25,
-    marginVertical: 10,
+    marginVertical: 5,
     paddingVertical: 13
   },
   buttonText: {

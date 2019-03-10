@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 540,
+  "expoServerNgrokUrl": "https://k8-v2h.victorgzv.app.exp.direct",
+  "packagerNgrokUrl": "https://packager.k8-v2h.victorgzv.app.exp.direct",
+  "ngrokPid": 573
 }

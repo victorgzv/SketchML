@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet,View,Text,TouchableOpacity,TextInput} from 'react-native';
+import {StyleSheet,View,Text,TouchableOpacity,TextInput,Switch,Image} from 'react-native';
 
 export default class Singup extends React.Component {
   unsubscribe = null;
@@ -32,8 +32,29 @@ export default class Singup extends React.Component {
                 autoCapitalize = "none"
                 />
             );
-          }else if(objectType==="Label"){
+          }else if(objectType==="Text"){
             uiElement.push( <Text style = {styles.label}> Text</Text>);
+          }
+          else if(objectType==="Button"){
+            uiElement.push( 
+                  <TouchableOpacity style={styles.button} >
+                    <Text style={styles.buttonText}>Button</Text>
+                  </TouchableOpacity> 
+            );
+          }
+          else if(objectType==="Image"){
+            uiElement.push(
+                        <Image  style={styles.img}
+          			        source={require('../assets/img-placeholder.png')}
+                        />
+            );
+          }
+          else if(objectType==="Switch"){
+            uiElement.push( 
+                          <Switch style = {styles.switch}
+                          thumbTintColor="#338a3e"
+                          />
+            );
           }
       }
       layout.push(<View style={styles.rows}>{uiElement}</View>);
@@ -156,8 +177,32 @@ const styles = StyleSheet.create({
        borderWidth: 1,
        paddingLeft:5
     },
+    button: {
+      margin: 15,
+      height: 40,
+      width:100,
+      backgroundColor:'#7bed9f',
+      justifyContent: 'center',
+    
+    },
+    buttonText: {
+      fontSize:16,
+      fontWeight:'500',
+      color:'black',
+      textAlign:'center'
+    },
+    switch: {
+      margin: 25,
+      height: 40,
+      flex:1, 
+    },
+    img: {
+      width : 100,
+      height :100,
+      
+    },
     label: {
       flex:1,
-        margin: 15
+       margin: 25
      }
  })

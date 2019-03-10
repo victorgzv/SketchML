@@ -141,17 +141,30 @@ async function createLayoutFile(fileBucket,bucket,filePath,predictions) {
           let objectType= rowOrder[i][j]['object'];
           if(objectType==="Textfield"){
             console.log("TEXTFIELD");
-            
-            let textfield="<TextInput style = {styles.input} "+
+            let textfield = "<TextInput style = {styles.input} "+
             "underlineColorAndroid = 'transparent' "+
-            "placeholderTextColor = '#9a73ef' "+
             "autoCapitalize = 'none'/>";
             concatenate +=textfield;
-
-          }else if(objectType==="Label"){
+          }else if(objectType==="Text"){
             console.log("LABEL");
-            let label ="<Text style = {styles.label}> Text </Text>";
+            let label = "<Text style = {styles.label}> Text </Text>";
             concatenate += label;
+          }else if(objectType==="Button"){
+            console.log("BUTTON");
+            let button = " <TouchableOpacity style={styles.button}>"+
+                        "<Text style={styles.buttonText}>Button</Text>"+
+                        "</TouchableOpacity>";
+            concatenate += button;
+          }else if(objectType==="Image"){
+            console.log("IMAGE");
+            let image = "<Image style={styles.img}"+
+                       "source={require('../assets/img-placeholder.png')}/>";
+            concatenate += image;
+          }else if(objectType==="Switch"){
+            console.log("SWITCH");
+            let switchui = "<Switch style = {styles.switch}"+
+                           "thumbTintColor='#338a3e'/>";
+            concatenate += switchui;
           }
       }
       concatenate +="</View>";
@@ -288,13 +301,25 @@ exports.startPrediction = functions.storage.object().onFinalize((event) => {
           let class_name = "";
           let class_color = "";
           if (objectName[i] === 1) {
-            console.log("CLASS: LABEL");
-            class_name = "Label";
+            console.log("CLASS: TEXT");
+            class_name = "Text";
             class_color = "Firebrick"
           } else if (objectName[i] === 2) {
             console.log("CLASS: TEXT FIELD");
             class_name = "Textfield";
             class_color = "limegreen"
+          } else if (objectName[i] === 3) {
+            console.log("CLASS: BUTTON");
+            class_name = "Button";
+            class_color = "gold"
+          } else if (objectName[i] === 4) {
+            console.log("CLASS: IMAGE");
+            class_name = "Image";
+            class_color = "deepskyblue	"
+          } else if (objectName[i] === 5) {
+            console.log("CLASS: SWITCH");
+            class_name = "Switch";
+            class_color = "purple1"
           }
           console.log("Class: " + objectName[i]);
           data += "stroke " + class_color + " fill none rectangle " + x0 + "," + y0 + "," + x1 + "," + y1 + "\r\n";

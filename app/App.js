@@ -1,9 +1,6 @@
 import React from 'react';
 import { StyleSheet, View} from 'react-native';
-
 import Routes from './Routes';
-
-
 
 export default class App extends React.Component {
   unsubscribe = null;
