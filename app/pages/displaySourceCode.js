@@ -63,6 +63,7 @@ loading:true
                 <View style={styles.container}>
                     <ScrollView>
                         <Text
+                        style={styles.code}
                         selectable={true} 
                         >{this.state.code}</Text>
                     </ScrollView>
@@ -84,6 +85,10 @@ const styles = StyleSheet.create({
     container: {
       justifyContent: 'center',
       
+    },
+    code: {
+      fontFamily: 'monospace',
+      fontSize: 12
     },
     TouchableOpacityStyle: {
       position: 'absolute',
