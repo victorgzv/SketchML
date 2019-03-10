@@ -7,9 +7,10 @@ import {
   ActivityIndicator,
   Alert
 } from 'react-native';
-import {ImagePicker, Permissions} from 'expo';
+import {ImagePicker, Permissions, ImageManipulator} from 'expo';
 import * as firebase from 'firebase';
 import {Actions} from 'react-native-router-flux';
+
 
 
 export default class Landing extends React.Component {
@@ -25,8 +26,9 @@ export default class Landing extends React.Component {
 
       let result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
-        aspect: [9, 16],
+        aspect: [10, 16]
       });
+     
       this._handleImagePicked(result);
     };
     chooseFromGallery = async () => {
@@ -35,8 +37,9 @@ export default class Landing extends React.Component {
 
       let result = await ImagePicker.launchImageLibraryAsync({
         allowsEditing: true,
-        aspect: [9, 16],
+        aspect: [10, 16]
       });
+     
       this._handleImagePicked(result);
     };
     addurl = () =>{
@@ -63,7 +66,13 @@ export default class Landing extends React.Component {
       try {
         this.setState({ uploading: true });
         if (!pickerResult.cancelled) {
-          await uploadImageAsync(pickerResult.uri,this.props.email,this.props.sname);
+          console.log(pickerResult.uri);
+          //Manipulate size of image. The image sent to the server will be 600x800 px
+          const manipResult = await ImageManipulator.manipulateAsync(
+            pickerResult.uri,[{resize: { width: 600,height:800 }}],{ compress: 1, format: "jpg", base64: false }
+          );
+          console.log(manipResult.uri);
+          await uploadImageAsync(manipResult.uri,this.props.email,this.props.sname);
           const ref = firebase.storage().ref().child(this.props.email + "/" + this.props.sname);
           await ref.getDownloadURL().then(function(url) {
             console.log("url: " + url);

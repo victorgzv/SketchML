@@ -45,19 +45,6 @@ async function makePrediction(b64img) {
     });
   });
 }
-function resizeImg(filepath) {
-  return new Promise((resolve, reject) => {
-    exec(`convert ${filepath} -resize 600x ${filepath}`, (err) => {
-      if (err) {
-        console.error('Failed to resize image', err);
-        reject(err);
-      } else {
-        console.log('resized image successfully');
-        resolve(filepath);
-      }
-    });
-  });
-}
 //Function to sort bounding boxes by its minY coordinate
 function sortFunction(a, b) {
   if (a['y0'] === b['y0']) {
@@ -151,14 +138,14 @@ async function createLayoutFile(fileBucket,bucket,filePath,predictions) {
             concatenate += label;
           }else if(objectType==="Button"){
             console.log("BUTTON");
-            let button = " <TouchableOpacity style={styles.button}>"+
-                        "<Text style={styles.buttonText}>Button</Text>"+
+            let button = "<TouchableOpacity style={styles.btn}>"+
+                        "<Text style={styles.btnText}>Button</Text>"+
                         "</TouchableOpacity>";
             concatenate += button;
           }else if(objectType==="Image"){
             console.log("IMAGE");
             let image = "<Image style={styles.img}"+
-                       "source={require('../assets/img-placeholder.png')}/>";
+                       "source={require('yourImage.png')}/>";
             concatenate += image;
           }else if(objectType==="Switch"){
             console.log("SWITCH");
@@ -264,13 +251,6 @@ exports.startPrediction = functions.storage.object().onFinalize((event) => {
     console.log('dest', destination);
     return file.download({
       destination: destination
-    }).then(() => {
-      if (sizeOf(destination).width > 600) {
-        console.log('scaling image down...');
-        return resizeImg(destination);
-      } else {
-        return destination;
-      }
     }).then(() => {
       console.log('base64 encoding image...');
       let bitmap = fs.readFileSync(destination);
