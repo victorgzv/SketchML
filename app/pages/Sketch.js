@@ -40,11 +40,9 @@ export default class Sketch extends React.Component {
 	render(){
 		return(
 			<View style={styles.container}>
-      <Text > Welcome</Text>
-          
           <TextInput style={styles.inputBox} 
               underlineColorAndroid='rgba(0,0,0,0)' 
-              placeholder="Skecth Name"
+              placeholder="Sketch Name"
               placeholderTextColor = "#9E9E9E"
               selectionColor="#fff"
               onChangeText={(text) => this.setState({name: text})}

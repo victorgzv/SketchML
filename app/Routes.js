@@ -5,7 +5,7 @@ import Login from './pages/login';
 import Singup from './pages/singup';
 import Landing from './pages/landing';
 import Sketch from './pages/Sketch';
-import ListSketches from './pages/displaySketches';
+import ListSketches from './pages/displaySketches1';
 import SketchProfile from './pages/sketchProfile';
 import DisplayLayout from './pages/displayLayout';
 import DisplaySourceCode from './pages/displaySourceCode';
