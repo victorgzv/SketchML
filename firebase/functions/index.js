@@ -27,7 +27,7 @@ async function makePrediction(b64img) {
 
     const params = {
       auth: client,
-      name: 'projects/sketchml/models/sketchml_detect/versions/v1',
+      name: 'projects/sketchml/models/sketchml_detect/versions/v2',
       resource: {
         instances: [{ "b64": b64img }]
       }

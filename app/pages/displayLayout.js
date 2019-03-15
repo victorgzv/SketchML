@@ -88,6 +88,8 @@ sortXaxis(a, b) {
       return (a['x0'] < b['x0']) ? -1 : 1;
   }
 }
+
+
 //This method returns information about the predicted bounding boxes and create code according to the type of object found
   onDataLoad = (querySnapshot) => {
     var elements =[];
