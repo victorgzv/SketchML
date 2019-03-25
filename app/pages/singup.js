@@ -7,7 +7,8 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  Alert
+  Alert,
+  KeyboardAvoidingView
 } from 'react-native';
 import Logo from '../components/logo';
 
@@ -30,7 +31,7 @@ export default class Singup extends React.Component {
         password: password
       });
       Alert.alert('Thanks for signing up!','Registration completed');
-      Actions.sketch({email:email})
+      Actions.listSketches({email:email})
     }else{
       this.setState({
         message: 'Incomplete fields'
@@ -43,8 +44,8 @@ export default class Singup extends React.Component {
   }
 	render(){
 		return(
-			<View style={styles.container}>
-				<Logo></Logo>
+			<KeyboardAvoidingView behaviour="padding" style={styles.container}>
+				<Logo width= {120} height={120}></Logo>
         <TextInput style={styles.inputBox} 
               underlineColorAndroid='rgba(0,0,0,0)' 
               placeholder="Name"
@@ -82,7 +83,7 @@ export default class Singup extends React.Component {
           <Text style={styles.singupText}>Already have an account?</Text>
           <TouchableOpacity onPress={this.goBack}><Text style={styles.singupButton}>Sign in</Text></TouchableOpacity>
         </View>
-  			</View>
+  			</KeyboardAvoidingView>
 			)
 	}
 }

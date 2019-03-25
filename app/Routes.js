@@ -12,18 +12,30 @@ import DisplaySourceCode from './pages/displaySourceCode';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import {config,settings} from './FirebaseConfig'; 
+import {Font} from 'expo';
 
 
 firebase.initializeApp(config);
 const firestore = firebase.firestore();
 firestore.settings(settings);
 export default class Routes extends React.Component {
+    
+		state={
+            fontLoaded:false
+        }
+	
+	async componentDidMount(){
+		await Font.loadAsync({
+			'System-code': require('./assets/fonts/code-regular.ttf')
+		});
+		this.setState({fontLoaded:true})
+	}
     render(){
         return(
             <Router navigationBarStyle={styles.navBar} titleStyle={styles.navTitle} sceneStyle={styles.routerScene} hideNavBar={false}>
-                <Stack key="root"  >
-                    <Scene key="login" component={Login} db ={firestore} title="Login" hideNavBar={true}/>
-                    <Scene key="signup" component={Singup} db ={firestore} title="Register" hideNavBar={true}/>
+                <Stack key="root">
+                    <Scene key="login" component={Login} db ={firestore} fontLoaded= {this.state.fontLoaded} title="Login" hideNavBar={true}/>
+                    <Scene key="signup" component={Singup} db ={firestore} fontLoaded= {this.state.fontLoaded} title="Register" hideNavBar={true}/>
                     <Scene key="sketch" component={Sketch} db ={firestore} title="Sketch" hideNavBar={true}/>
                     <Scene key="listSketches" component={ListSketches} db ={firestore} title="Sketches" />
                     <Scene key="landing" component={Landing} db ={firestore} hideNavBar={false} />
@@ -41,7 +53,8 @@ const styles = StyleSheet.create({
      backgroundColor: 'red', // changing navbar color
   },
   navTitle: {
-    width: 150
+    width: 150,
+    fontFamily: 'Roboto'
   },
   routerScene: {
       marginTop:0

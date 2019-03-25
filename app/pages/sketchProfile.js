@@ -5,10 +5,11 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Image,
   Linking
 } from 'react-native';
-import { Dimensions } from 'react-native'
-import Image from 'react-native-scalable-image';
+import { Dimensions } from 'react-native';
+import ScalableImage from 'react-native-scalable-image';
 import { DotIndicator} from 'react-native-indicators';
 
 
@@ -47,18 +48,27 @@ export default class Singup extends React.Component {
 			<View style={styles.container}>
              {animating ? (
             <View style={styles.container}>
+                <Image 
+                     style={styles.infoImg}
+                    source={require('../assets/ml.png')} 
+                />
+                <Text style={styles.infoText}>Please wait while your sketch is being processed.</Text>
                 <DotIndicator color='#66BB6A' />
             </View>
             ) : (
               <View style={styles.container}>
                {empty ? (
                   <View style={styles.container}>
-                  <Text>No predictions found</Text>
+                    <Image 
+                     style={styles.infoImg}
+                    source={require('../assets/no_predictions.png')} 
+                    />
+                    <Text style={styles.infoText}>No results found</Text>
                   </View>
                ):(
                 <View style={styles.container}>
-                    <Text > Sketch: {this.props.sname.replace(/_/g, " ")}</Text>
-                    <Image
+                    {/* <Text > Sketch: {this.props.sname.replace(/_/g, " ")}</Text> */}
+                    <ScalableImage
                     width={Dimensions.get('window').width+50}
                     height={(Dimensions.get('window').height)-320}
                     // height will be calculated automatically
@@ -127,9 +137,16 @@ const styles = StyleSheet.create({
     color:'#ffffff',
     textAlign:'center'
   },
-  lottie: {
-    width: 250,
-    height: 300
+  infoText:{
+    fontSize:20,
+		fontFamily: 'Roboto',
+		color:'black',
+    textAlign: "center"
+  },
+  infoImg:{
+    width:150,
+    height:150,
+    margin: 100
   }
   
 });

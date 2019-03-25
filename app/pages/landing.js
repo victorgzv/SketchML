@@ -3,10 +3,12 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   TouchableOpacity,
   ActivityIndicator,
   Alert
 } from 'react-native';
+
 import {ImagePicker, Permissions, ImageManipulator} from 'expo';
 import * as firebase from 'firebase';
 import {Actions} from 'react-native-router-flux';
@@ -80,7 +82,7 @@ export default class Landing extends React.Component {
             this.addurl();
           }.bind(this)) ;
           
-          await Actions.listSketches({email:this.props.email});
+          await Actions.sketchProfile({email:this.props.email,sname:this.props.sname});
         }
       } catch (e) {
         console.log(e);
@@ -99,7 +101,13 @@ export default class Landing extends React.Component {
                       <ActivityIndicator size="large" color="#66BB6A" />
                     </View>
                 ) : (
-                <View style={styles.container}>
+              <View style={styles.container}>
+                <Text style={styles.infoText}>Bring your idea to life by drawing any of the following elements:</Text>
+                    <Image 
+                      style={styles.infoImg}
+                     source={require('../assets/guidelines.png')} 
+                    />
+                <View style={styles.buttonsContainer}>
                     <TouchableOpacity style={styles.button} onPress={this.takePicture}>
                       <Text style={styles.buttonText}>Take picture</Text>
                     </TouchableOpacity> 
@@ -107,6 +115,7 @@ export default class Landing extends React.Component {
                       <Text style={styles.buttonText}>Upload picture</Text>
                     </TouchableOpacity> 
                 </View>
+              </View>
                  )}
   			</View>
 			)
@@ -143,16 +152,21 @@ async function uploadImageAsync(uri,email,sname) {
 
 const styles = StyleSheet.create({
   container : {
-    backgroundColor: '#FAFAFA',
+    backgroundColor: 'white',
     flex: 1,
     justifyContent:'center',
     alignItems: 'center'
   },
+  buttonsContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end'
+  },
   button: {
+    flex:1,
     width:300,
     backgroundColor:'#66BB6A',
-    borderRadius: 25,
-    marginVertical: 10,
+    borderRadius: 5,
+    margin: 5,
     paddingVertical: 13
   },
   buttonText: {
@@ -161,4 +175,15 @@ const styles = StyleSheet.create({
     color:'#ffffff',
     textAlign:'center'
   },
+  infoText:{
+    fontSize:18,
+		fontFamily: 'Roboto',
+		color:'black',
+    textAlign: "center"
+  },
+  infoImg:{
+    width: 350,
+    height:400,
+    margin: 50
+  }
 });

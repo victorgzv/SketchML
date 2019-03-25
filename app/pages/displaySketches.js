@@ -20,7 +20,7 @@ export default class displaySketches extends React.Component {
     sketches: [],
     isEmpty: false
   };
-  newSkecth = () =>{
+  newSketch = () =>{
     let email = this.props.email;
     Actions.sketch({email:email});
   }
@@ -53,13 +53,13 @@ export default class displaySketches extends React.Component {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        {text: 'OK', onPress: () => this.removeSkecth()},
+        {text: 'OK', onPress: () => this.removeSketch()},
       ],
       {cancelable: false},
     );
   }
   //Function that removes a sketch from the database and their corresponding images from cloud storage
-  removeSkecth = async () =>{
+  removeSketch = async () =>{
     //References to the images stored in cloud storage
     const originalImage = firebase.storage().ref().child(this.props.email+"/" + this.state.sname);
     const predictedImage = firebase.storage().ref().child(this.props.email+"/" + this.state.sname +"-predicted");
@@ -142,7 +142,7 @@ export default class displaySketches extends React.Component {
                     style={styles.no_results}
                     source={require('../assets/no_results_found.png')} 
               />
-              <TouchableOpacity style={styles.button} onPress={this.newSkecth}>
+              <TouchableOpacity style={styles.button} onPress={this.newSketch}>
                   <Text style={styles.buttonText}>Create Sketch</Text>
               </TouchableOpacity> 
          	</View>

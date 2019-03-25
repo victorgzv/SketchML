@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
+
 import {
-  StyleSheet,
-  Text,
-  View,
-   Image 
+	StyleSheet,
+	View,
+  Text
 } from 'react-native';
 
+
 export default class Logo extends React.Component{
+
 	render(){
 		return(
 			<View style={styles.container}>
-				<Image  style={{width:70, height: 70}}
-          			source={require('../assets/icon.png')}/>
-          		<Text style={styles.logoText}>Sketch ML</Text>	
-  			</View>
+				{/* <Image  style={{width:this.props.width, height: this.props.height}}
+          			source={require('../assets/icon.png')}/>	
+				</View> */}
+				<Text style={{ fontFamily: 'System-code', fontSize: 56 }}>&lt;Sketch ML/&gt;</Text>
+			</View>
 			)
 	}
 }
@@ -23,10 +26,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent:'center',
 		alignItems: 'center',
-		marginVertical:5
+		marginTop:5
   },
   logoText : {
-  	fontSize:18,
-  	color:'black'
+		fontSize:38,
+		fontFamily: 'System-code',
+		color:'black',
+		textAlign: "center",
   }
 });
