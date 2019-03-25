@@ -5,12 +5,11 @@ import {
   TouchableOpacity,
   View,
   Image,
-  FlatList,
   Alert,
   Dimensions,
   ScrollView
 } from 'react-native';
-import { List,ListItem } from "react-native-elements";
+import ImageLoad from 'react-native-image-placeholder';
 import { Actions } from 'react-native-router-flux';
 import * as firebase from 'firebase';
 
@@ -196,16 +195,26 @@ export default class displaySketches1 extends React.Component {
                   <Card key={i} 
                   onPress={()=>{this.showDetails(item.name,this.props.email)}}
                   onLongPress={() => {this.combinedFunction(item.name)}}>
-                  
-                     <Image source={{uri: item.original_img}} style={styles.image}></Image> 
+                     <ImageLoad
+                      style={styles.image}
+                      loadingStyle={{ size: 'large', color: 'green' }}
+                      source={{uri: item.original_img}}
+                     />  
                      <Text style={styles.title}>{item.name.replace(/_/g, " ")}</Text>
                   </Card>
                 );
                
               })
             }
+              
              </View>
             </ScrollView>
+            <TouchableOpacity 
+                    activeOpacity={0.5} 
+                    style={styles.TouchableOpacityStyle}
+                    onPress={this.newSkecth}  >
+                        <Image source={require('../assets/plus.png')}  style={styles.FloatingButtonStyle} />
+            </TouchableOpacity>
           </Container>
         )}
   		</View>
@@ -303,13 +312,31 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   image:{
-    width: resizeComponent(CardContainerSize.Width,7),
+    width: resizeComponent(CardContainerSize.Width,6),
     height: 151,
-    resizeMode: 'stretch'
+    resizeMode: 'stretch',
+    borderRadius: 5
   },
   title:{
     fontSize: 13,
     fontWeight: 'bold',
     padding: 10
+  },
+  TouchableOpacityStyle: {
+    position: 'absolute',
+    width: 50,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 30,
+    bottom: 30,
+    backgroundColor:'#66BB6A',
+    borderRadius: 64,
+  },
+  FloatingButtonStyle: {
+    resizeMode: 'contain',
+    width: 30,
+    height: 30,
+   
   }
 });

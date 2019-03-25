@@ -5,7 +5,9 @@ import {
   Text,
   TextInput,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  ActivityIndicator
 } from 'react-native';
 import Logo from '../components/logo';
 export default class Login extends React.Component {
@@ -31,7 +33,7 @@ export default class Login extends React.Component {
               querySnapshot.forEach(function(doc) {
                 console.log(querySnapshot.size); 
                 if(querySnapshot.size >0){
-                  Actions.sketch({email:email})
+                  Actions.listSketches({email:email});
                   this.setState({
                     message: ''
                   });      
@@ -51,10 +53,16 @@ export default class Login extends React.Component {
     Actions.signup()
   }
 	render(){
+    const fontLoaded= this.props.fontLoaded;
 		return(
-			<View style={styles.container}>
-				<Logo></Logo>
-        <View style={styles.container}>
+			<KeyboardAvoidingView behaviour="padding" style={styles.container}>
+        {fontLoaded ? (
+                   	<Logo width= {150} height={150}></Logo>
+                ) : (  
+                   <ActivityIndicator size="small" color="#66BB6A" />
+                )
+        }
+        <View style={styles.formContainer}>
           <TextInput style={styles.inputBox} 
               underlineColorAndroid='rgba(0,0,0,0)' 
               placeholder="Email"
@@ -62,6 +70,7 @@ export default class Login extends React.Component {
               selectionColor="#fff"
               keyboardType="email-address"
               autoCapitalize = 'none'
+              returnKeyType = "next"
               onSubmitEditing={()=> this.password.focus()}
               onChangeText={(text) => this.setState({email: text})}
               />
@@ -70,7 +79,8 @@ export default class Login extends React.Component {
               placeholder="Password"
               secureTextEntry={true}
               placeholderTextColor = "#9E9E9E"
-              autoCapitalize = 'none'                                                                        
+              autoCapitalize = 'none'
+              returnKeyType = "go"                                                                        
               ref={(input) => this.password = input}
               onChangeText={(text) => this.setState({password: text})}
               />
@@ -89,7 +99,7 @@ export default class Login extends React.Component {
           <Text style={styles.singupText}>Don't have an account yet?</Text>
           <TouchableOpacity onPress={this.signup}><Text style={styles.singupButton}>Signup</Text></TouchableOpacity>
         </View>
-  			</View>
+  			</KeyboardAvoidingView>
 			)
 	}
 }
@@ -101,6 +111,10 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems: 'center',
     
+  },
+  formContainer: {
+    justifyContent:'center',
+    alignItems: 'center'
   },
   singupTextContent:{
     flexGrow: 1,

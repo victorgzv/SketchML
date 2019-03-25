@@ -4,7 +4,9 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  KeyboardAvoidingView,
   View,
+  Image,
   TouchableOpacity
 } from 'react-native';
 export default class Sketch extends React.Component {
@@ -32,30 +34,29 @@ export default class Sketch extends React.Component {
       
     }
   }
-  listSketches=()=>{
-    let email = this.props.email;
-    Actions.listSketches({email:email});
-  }
+  
   
 	render(){
 		return(
-			<View style={styles.container}>
-          <TextInput style={styles.inputBox} 
-              underlineColorAndroid='rgba(0,0,0,0)' 
-              placeholder="Sketch Name"
-              placeholderTextColor = "#9E9E9E"
-              selectionColor="#fff"
-              onChangeText={(text) => this.setState({name: text})}
-              />
-            <Text style={styles.error_message}> {this.state.message} </Text>
-           <TouchableOpacity style={styles.button} onPress={this.createSketch}>
-             <Text style={styles.buttonText}>Create Sketch</Text>
-           </TouchableOpacity>
-           <TouchableOpacity style={styles.button} onPress={this.listSketches}>
-             <Text style={styles.buttonText}>Display Sketches</Text>
-          </TouchableOpacity>
-           
-  			</View>
+      <KeyboardAvoidingView behaviour="padding" style={styles.container}>
+          <Image 
+            style={styles.infoImg}
+            source={require('../assets/idea.png')} 
+          />
+          <View style={styles.formContainer}>
+            <TextInput style={styles.inputBox} 
+                underlineColorAndroid='rgba(0,0,0,0)' 
+                placeholder="Sketch Name"
+                placeholderTextColor = "#9E9E9E"
+                selectionColor="#fff"
+                onChangeText={(text) => this.setState({name: text})}
+                />
+              <Text style={styles.error_message}> {this.state.message} </Text>
+            <TouchableOpacity style={styles.button} onPress={this.createSketch}>
+              <Text style={styles.buttonText}>Create Sketch</Text>
+            </TouchableOpacity> 
+           </View>      
+  			</KeyboardAvoidingView>
 			)
 	}
 }
@@ -84,6 +85,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     paddingVertical: 13
   },
+  formContainer: {
+    justifyContent:'center',
+    alignItems: 'center'
+  },
   buttonText: {
     fontSize:18,
     fontWeight:'500',
@@ -92,5 +97,10 @@ const styles = StyleSheet.create({
   },
   error_message:{
     color:'#C20000',
+  },
+  infoImg:{
+    width:150,
+    height:150,
+    margin: 50
   }
 });
