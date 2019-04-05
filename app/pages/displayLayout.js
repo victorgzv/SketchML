@@ -191,7 +191,8 @@ const styles = StyleSheet.create({
       fontSize:16,
       fontWeight:'500',
       color:'black',
-      textAlign:'center'
+      textAlign:'center',
+      fontFamily: 'Roboto'
     },
     switch: {
       margin: 25,

@@ -32,13 +32,15 @@ async function makePrediction(b64img) {
         instances: [{ "b64": b64img }]
       }
     };
-
+    var timeStart = performance.now();  
     ml.projects.predict(params, (err, result) => {
       console.log("executing ML Predict...");
       if (err) {
         console.log("ERROR:" + err);
         reject(err);
       } else {
+        var timeEnd = performance.now();  
+        console.log("The object detection took " + (timeStart- timeEnd) + " ms.")  
         console.log("RESULT: " + result.data.predictions[0].num_detections);
         resolve(result);
       }
@@ -145,7 +147,7 @@ async function createLayoutFile(fileBucket,bucket,filePath,predictions) {
           }else if(objectType==="Image"){
             console.log("IMAGE");
             let image = "<Image style={styles.img}"+
-                       "source={require('yourImage.png')}/>";
+                        "source={require('yourImage.png')}/>";
             concatenate += image;
           }else if(objectType==="Switch"){
             console.log("SWITCH");
@@ -220,14 +222,20 @@ async function createLayoutFile(fileBucket,bucket,filePath,predictions) {
   }
 }
 
+// exports.hourly_job = functions.pubsub
+//   .topic('hourly-tick')
+//   .onPublish((message) => {
+//     console.log("This job is run every hour!");
+//     if (message.data) {
+//       const dataString = Buffer.from(message.data, 'base64').toString();
+//       console.log(`Message Data: ${dataString}`);
+//     }
+
+//     return true;
+//   });
+
+
 exports.startPrediction = functions.storage.object().onFinalize((event) => {
-
-
-  fs.rmdir('./tmp/', (err) => {
-    if (err) {
-      console.log('error deleting tmp/ dir');
-    }
-  });
 
   const fileBucket = event.bucket;
   const contentType = event.contentType;
@@ -238,13 +246,21 @@ exports.startPrediction = functions.storage.object().onFinalize((event) => {
   const dirName = path.dirname(filePath);
 
   if (path.basename(filePath).endsWith('-predicted') ) {
-    console.log('Files already exists. Exiting ...');
-    return;
+    console.log('Predicted File already exists. Exiting ...');
+    return 0;
   }
   if (path.basename(filePath).endsWith('-code.js')) {
-    console.log('Files already exists. Exiting ...');
-    return;
+    console.log('Code File already exists. Exiting ...');
+    return 0;
   }
+  fs.rmdir('./tmp/', (err) => {
+    if (err) {
+      console.log('error deleting tmp/ dir');
+    }else{
+      console.log('tmp/ dir removed succesfully');
+    }
+  });
+  
   if (filePath.startsWith(dirName)) {
     const destination = '/tmp/' + fileName;
     console.log('got a new image', filePath);
@@ -349,7 +365,7 @@ exports.startPrediction = functions.storage.object().onFinalize((event) => {
               imageRef.where("name", "==", path.basename(filePath)).where("from", "==", path.dirname(filePath)).get()
                 .then((querySnapshot) => {
                   querySnapshot.forEach((doc) => {
-                    console.log(querySnapshot.size);
+                    // console.log(querySnapshot.size);
                     if (querySnapshot.size > 0) {
                       console.log(doc.id, " => ", doc.data());
                       imageRef.doc(doc.id).update({ num_predictions: num_predictions, 
@@ -380,7 +396,7 @@ exports.startPrediction = functions.storage.object().onFinalize((event) => {
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-              console.log(querySnapshot.size);
+              // console.log(querySnapshot.size);
               if (querySnapshot.size > 0) {
                 console.log(doc.id, " => ", doc.data());
                 imageRef.doc(doc.id).update({ num_predictions: num_predictions }, { merge: true });
@@ -396,5 +412,7 @@ exports.startPrediction = functions.storage.object().onFinalize((event) => {
         return console.log("No objects were found");
       }
     })
+  }else{
+    return false;
   }
 });

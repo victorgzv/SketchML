@@ -15,6 +15,7 @@ import {config,settings} from './FirebaseConfig';
 import {Font} from 'expo';
 
 
+
 firebase.initializeApp(config);
 const firestore = firebase.firestore();
 firestore.settings(settings);
@@ -32,32 +33,32 @@ export default class Routes extends React.Component {
 	}
     render(){
         return(
-            <Router navigationBarStyle={styles.navBar} titleStyle={styles.navTitle} sceneStyle={styles.routerScene} hideNavBar={false}>
-                <Stack key="root">
-                    <Scene key="login" component={Login} db ={firestore} fontLoaded= {this.state.fontLoaded} title="Login" hideNavBar={true}/>
-                    <Scene key="signup" component={Singup} db ={firestore} fontLoaded= {this.state.fontLoaded} title="Register" hideNavBar={true}/>
-                    <Scene key="sketch" component={Sketch} db ={firestore} title="Sketch" hideNavBar={true}/>
-                    <Scene key="listSketches" component={ListSketches} db ={firestore} title="Sketches" />
-                    <Scene key="landing" component={Landing} db ={firestore} hideNavBar={false} />
-                    <Scene key="sketchProfile" component={SketchProfile} db ={firestore} title="Results" />
+            <Router >
+                <Scene key="root"   navigationBarStyle={{ height: 40,paddingTop:5}} titleStyle={styles.navTitle} >
+                    <Scene key="login"  component={Login} db ={firestore} fontLoaded= {this.state.fontLoaded} title="Login" hideNavBar={true}/>
+                    <Scene key="signup" component={Singup} db ={firestore} title="Register" hideNavBar={true}/>
+                    <Scene key="sketch" component={Sketch} db ={firestore} title="New Sketch" hideNavBar={false}/>
+                    <Scene key="listSketches" component={ListSketches} db ={firestore} title="Sketches" renderLeftButton={()=>(null)} />
+                    <Scene key="landing" component={Landing} db ={firestore} />
+                    <Scene key="sketchProfile" component={SketchProfile} db ={firestore} title="Sketch Results" />
                     <Scene key="displayLayout" component={DisplayLayout} db ={firestore} title="Layout" />
                     <Scene key="displaySourceCode" component={DisplaySourceCode} db ={firestore} title="Source Code"/>
-                </Stack>
+                </Scene>
             </Router>
         )
     }
     
 }
 const styles = StyleSheet.create({
-  navbar: {
-     backgroundColor: 'red', // changing navbar color
-  },
+
   navTitle: {
     width: 150,
+    marginBottom: 15,
     fontFamily: 'Roboto'
   },
   routerScene: {
-      marginTop:0
+      marginTop:0,
+      paddingTop: 0
   }
  
  })

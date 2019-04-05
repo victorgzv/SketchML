@@ -8,7 +8,7 @@ import {
   Image,
   Linking
 } from 'react-native';
-import { Dimensions } from 'react-native';
+import { Dimensions, BackHandler } from 'react-native';
 import ScalableImage from 'react-native-scalable-image';
 import { DotIndicator} from 'react-native-indicators';
 
@@ -24,9 +24,18 @@ export default class Singup extends React.Component {
   }
   componentDidMount(){
     unsubscribe = this.ref.onSnapshot(this.onImageLoad);
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.goBack(); // works best when the goBack is async
+      return true;
+    });
   }
   componentWillUnmount() {
     unsubscribe= null;
+    this.backHandler.remove();
+  }
+  async goBack(){
+    let email = this.props.email;
+    await Actions.listSketches({email:email});
   }
   displayLayout=()=>{
     let sname=this.props.sname;
@@ -76,12 +85,12 @@ export default class Singup extends React.Component {
                     /> 
                     <Text >{this.state.imageStatus}</Text> 
                     <TouchableOpacity style={styles.button} onPress={this.displayLayout}>
-                      <Text style={styles.buttonText}>Preview Layout</Text>
+                      <Text style={styles.buttonText}> Show Layout</Text>
                     </TouchableOpacity> 
                     {
                       codeUrl !== undefined ? (
                       <TouchableOpacity style={styles.button} onPress={this.displayCode}>
-                        <Text style={styles.buttonText}>Display Source Code</Text>
+                        <Text style={styles.buttonText}>Show Source Code</Text>
                       </TouchableOpacity> 
                       ):(
                         <Text>No code available</Text>
@@ -129,13 +138,19 @@ const styles = StyleSheet.create({
     backgroundColor:'#66BB6A',
     borderRadius: 25,
     marginVertical: 5,
-    paddingVertical: 13
+    paddingVertical: 13,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 15 ,
+    shadowOffset : { width: 1, height: 13}
   },
   buttonText: {
     fontSize:18,
     fontWeight:'500',
     color:'#ffffff',
-    textAlign:'center'
+    textAlign:'center',
+    fontFamily: 'Roboto'
   },
   infoText:{
     fontSize:20,

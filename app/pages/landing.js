@@ -83,6 +83,7 @@ export default class Landing extends React.Component {
           }.bind(this)) ;
           
           await Actions.sketchProfile({email:this.props.email,sname:this.props.sname});
+          
         }
       } catch (e) {
         console.log(e);
@@ -163,27 +164,34 @@ const styles = StyleSheet.create({
   },
   button: {
     flex:1,
-    width:300,
+    width:200,
     backgroundColor:'#66BB6A',
-    borderRadius: 5,
-    margin: 5,
-    paddingVertical: 13
+    borderRadius: 35,
+    margin: 15,
+    paddingVertical: 13,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 15 ,
+    shadowOffset : { width: 1, height: 13}
   },
   buttonText: {
     fontSize:18,
     fontWeight:'500',
     color:'#ffffff',
-    textAlign:'center'
+    textAlign:'center',
+    fontFamily: 'Roboto'
   },
   infoText:{
     fontSize:18,
 		fontFamily: 'Roboto',
 		color:'black',
-    textAlign: "center"
+    textAlign: "center",
+    fontWeight: 'bold',
   },
   infoImg:{
     width: 350,
-    height:400,
-    margin: 50
+    height:420,
+    margin: 40
   }
 });
