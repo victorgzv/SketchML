@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
     fontSize:18,
     fontWeight:'500',
     color:'#ffffff',
-    textAlign:'center'
+    textAlign:'center',
+    fontFamily: 'Roboto'
   },
   error_message:{
     color:'#C20000',

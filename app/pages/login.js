@@ -147,13 +147,19 @@ const styles = StyleSheet.create({
     backgroundColor:'#66BB6A',
     borderRadius: 25,
     paddingVertical: 12,
-    marginVertical: 10
+    marginVertical: 10,
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 15 ,
+    shadowOffset : { width: 1, height: 13}
   },
   buttonText: {
     fontSize:18,
     fontWeight:'500',
     color:'#ffffff',
-    textAlign:'center'
+    textAlign:'center',
+    fontFamily: 'Roboto'
   },
   error_message:{
     color:'#C20000',

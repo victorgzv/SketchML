@@ -26,12 +26,14 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent:'center',
 		alignItems: 'center',
-		marginTop:5
+		margin:15,
+
   },
   logoText : {
 		fontSize:38,
 		fontFamily: 'System-code',
 		color:'black',
 		textAlign: "center",
+		fontWeight: '600',
   }
 });

@@ -291,7 +291,8 @@ const styles = StyleSheet.create({
     fontSize:18,
     fontWeight:'500',
     color:'#ffffff',
-    textAlign:'center'
+    textAlign:'center',
+    fontFamily: 'Roboto'
   },
   listItem:{
     backgroundColor: '#9ACD32'
@@ -320,6 +321,7 @@ const styles = StyleSheet.create({
   title:{
     fontSize: 13,
     fontWeight: 'bold',
+    fontFamily: 'Roboto',
     padding: 10
   },
   TouchableOpacityStyle: {
@@ -328,10 +330,15 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    right: 30,
-    bottom: 30,
+    right: 20,
+    bottom: 20,
     backgroundColor:'#66BB6A',
     borderRadius: 64,
+    shadowColor: 'rgba(0,0,0, .4)', // IOS
+    shadowOffset: { height: 1, width: 1 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    elevation: 4 // Android
   },
   FloatingButtonStyle: {
     resizeMode: 'contain',
