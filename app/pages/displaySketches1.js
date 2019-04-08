@@ -96,6 +96,7 @@ export default class displaySketches1 extends React.Component {
   }
   componentWillUnmount() {
     unsubscribe= null;
+    this.backHandler.remove();
   }
   showDetails = (name,email) =>{
     Actions.sketchProfile({sname:name,email:email});

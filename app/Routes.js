@@ -17,6 +17,7 @@ import {Font} from 'expo';
 
 
 
+
 firebase.initializeApp(config);
 const firestore = firebase.firestore();
 firestore.settings(settings);
@@ -31,10 +32,11 @@ export default class Routes extends React.Component {
 			'System-code': require('./assets/fonts/code-regular.ttf')
 		});
 		this.setState({fontLoaded:true})
-	}
+    }
+
     render(){
         return(
-            <Router >
+            <Router sceneStyle={{ backgroundColor: '#ffffff' }} >
                 <Scene key="root"   navigationBarStyle={{ height: 40,paddingTop:5}} titleStyle={styles.navTitle} >
                     <Scene key="login"  component={Login} db ={firestore}  title="Login" hideNavBar={true}/>
                     <Scene key="signup" component={Singup} db ={firestore} title="Register" hideNavBar={true}/>

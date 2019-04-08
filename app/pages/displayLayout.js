@@ -28,12 +28,12 @@ export default class Singup extends React.Component {
             uiElement.push( 
                 <TextInput style = {styles.input}
                 underlineColorAndroid = "transparent"
-                placeholderTextColor = "#9a73ef"
-                autoCapitalize = "none"
+                placeholder="Enter Your text Here"
+                
                 />
             );
           }else if(objectType==="Text"){
-            uiElement.push( <Text style = {styles.label}> Text</Text>);
+            uiElement.push( <Text style = {styles.label}>Lorem Ipsum</Text>);
           }
           else if(objectType==="Button"){
             uiElement.push( 
@@ -52,7 +52,7 @@ export default class Singup extends React.Component {
           else if(objectType==="Switch"){
             uiElement.push( 
                           <Switch style = {styles.switch}
-                          thumbTintColor="#338a3e"
+                          thumbTintColor="#66BB6A"
                           />
             );
           }
@@ -163,49 +163,63 @@ sortXaxis(a, b) {
 
 const styles = StyleSheet.create({
     container: {
-      marginTop: 150,
+      marginTop: 50,
       justifyContent: 'center',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      alignItems: 'center'
+      
     },
     rows: {
       justifyContent: 'center',
       flexDirection: 'row',
+      alignItems: 'center',
    },
     input: {
-       margin: 15,
-       height: 40,
        flex:2,
-       borderColor: 'black',
-       borderWidth: 1,
-       paddingLeft:5
+       backgroundColor: '#fff',
+       borderWidth: .5,
+       borderColor: '#000',
+       height: 40,
+       borderRadius: 5 ,
+       margin: 15,
+       paddingHorizontal:16,
+       paddingVertical:12,
+       
     },
     button: {
-      margin: 15,
+      margin: 25,
       height: 40,
       width:100,
-      backgroundColor:'#7bed9f',
+      backgroundColor:'#66BB6A',
       justifyContent: 'center',
+      borderRadius: 5 ,
+      shadowColor: 'rgba(0, 0, 0, 0.1)',
+      shadowOpacity: 0.8,
+      elevation: 6,
+      shadowRadius: 15 ,
+      shadowOffset : { width: 1, height: 13}
     
     },
     buttonText: {
       fontSize:16,
       fontWeight:'500',
-      color:'black',
+      color:'white',
       textAlign:'center',
       fontFamily: 'Roboto'
     },
     switch: {
       margin: 25,
       height: 40,
-      flex:1, 
+     
     },
     img: {
-      width : 100,
-      height :100,
-      
+      width : 120,
+      height: 120,
+      margin: 25
     },
     label: {
-      flex:1,
-       margin: 25
+    
+       margin: 25,
+       
      }
  })
