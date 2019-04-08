@@ -6,7 +6,8 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  BackHandler
 } from 'react-native';
 import Logo from '../components/logo';
 export default class Login extends React.Component {
@@ -14,6 +15,11 @@ export default class Login extends React.Component {
     email: '',
     password:'',
     message:''
+  }
+  componentDidMount(){
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      return true;
+    });
   }
   loginUser = () =>{
     let email = this.state.email;
