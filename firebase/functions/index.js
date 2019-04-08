@@ -32,14 +32,14 @@ async function makePrediction(b64img) {
         instances: [{ "b64": b64img }]
       }
     };
-    var timeStart = performance.now();  
+    var timeStart = new Date();  
     ml.projects.predict(params, (err, result) => {
       console.log("executing ML Predict...");
       if (err) {
         console.log("ERROR:" + err);
         reject(err);
       } else {
-        var timeEnd = performance.now();  
+        var timeEnd = new Date();  
         console.log("The object detection took " + (timeStart- timeEnd) + " ms.")  
         console.log("RESULT: " + result.data.predictions[0].num_detections);
         resolve(result);

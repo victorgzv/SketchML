@@ -108,6 +108,7 @@ export default class Singup extends React.Component {
     querySnapshot.forEach((doc) => {
       const predicted_img = doc.data().predicted_url;
       const code_url = doc.data().code_url;
+      const num_predictions = doc.data().num_predictions;
       if(doc.data().num_predictions==0){
         this.setState({
           isLoading: false
