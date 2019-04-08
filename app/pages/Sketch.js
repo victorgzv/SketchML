@@ -4,15 +4,26 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  KeyboardAvoidingView,
   View,
   Image,
-  TouchableOpacity
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  BackHandler
 } from 'react-native';
 export default class Sketch extends React.Component {
   state = {
     name: '',
     message:''
+  }
+  componentDidMount(){
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.goBack(); // works best when the goBack is async
+      return true;
+    });
+  }
+  async goBack(){
+    let email = this.props.email;
+    await Actions.listSketches({email:email});
   }
   createSketch = () =>{
     let name = this.state.name;
@@ -39,11 +50,11 @@ export default class Sketch extends React.Component {
 	render(){
 		return(
       <KeyboardAvoidingView behaviour="padding" style={styles.container}>
-          <Image 
-            style={styles.infoImg}
-            source={require('../assets/idea.png')} 
-          />
-          <View style={styles.formContainer}>
+            <View style={styles.formContainer}>
+            <Image 
+              style={styles.infoImg}
+              source={require('../assets/idea.png')} 
+            />
             <TextInput style={styles.inputBox} 
                 underlineColorAndroid='rgba(0,0,0,0)' 
                 placeholder="Sketch Name"
@@ -63,8 +74,12 @@ export default class Sketch extends React.Component {
 
 const styles = StyleSheet.create({
   container : {
-    backgroundColor:  '#FAFAFA',
+    backgroundColor: '#FAFAFA',
     flex: 1,
+    justifyContent:'center',
+    alignItems: 'center', 
+  },
+  formContainer: {
     justifyContent:'center',
     alignItems: 'center'
   },
@@ -82,12 +97,13 @@ const styles = StyleSheet.create({
     width:300,
     backgroundColor:'#66BB6A',
     borderRadius: 25,
+    paddingVertical: 12,
     marginVertical: 10,
-    paddingVertical: 13
-  },
-  formContainer: {
-    justifyContent:'center',
-    alignItems: 'center'
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowOpacity: 0.8,
+    elevation: 6,
+    shadowRadius: 15 ,
+    shadowOffset : { width: 1, height: 13}
   },
   buttonText: {
     fontSize:18,
@@ -102,6 +118,6 @@ const styles = StyleSheet.create({
   infoImg:{
     width:150,
     height:150,
-    margin: 50
+    margin: 30
   }
 });

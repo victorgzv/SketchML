@@ -7,7 +7,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@google-cloud/storage": "^2.4.2",
+    "@google-cloud/storage": "^2.5.0",
     "box-intersect": "^1.0.2",
     "child-process-promise": "^2.2.1",
     "expo": "^31.0.2",

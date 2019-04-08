@@ -6,8 +6,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  ActivityIndicator
+  KeyboardAvoidingView
 } from 'react-native';
 import Logo from '../components/logo';
 export default class Login extends React.Component {
@@ -53,15 +52,12 @@ export default class Login extends React.Component {
     Actions.signup()
   }
 	render(){
-    const fontLoaded= this.props.fontLoaded;
+   
 		return(
 			<KeyboardAvoidingView behaviour="padding" style={styles.container}>
-        {fontLoaded ? (
-                   	<Logo width= {150} height={150}></Logo>
-                ) : (  
-                   <ActivityIndicator size="small" color="#66BB6A" />
-                )
-        }
+
+        <Logo width= {150} height={150}></Logo>
+             
         <View style={styles.formContainer}>
           <TextInput style={styles.inputBox} 
               underlineColorAndroid='rgba(0,0,0,0)' 
@@ -89,11 +85,7 @@ export default class Login extends React.Component {
 
            <TouchableOpacity style={styles.button} onPress={this.loginUser}>
              <Text style={styles.buttonText}>Login</Text>
-           </TouchableOpacity> 
-          
-          
-           
-          
+           </TouchableOpacity>    
   		</View>
         <View style={styles.singupTextContent}>
           <Text style={styles.singupText}>Don't have an account yet?</Text>
@@ -120,7 +112,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent:'center',
     alignItems: 'flex-end',
-    paddingVertical: 10,
+    paddingBottom: 20,
     flexDirection: 'row'
   },
   singupText:{

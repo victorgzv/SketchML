@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent:'center',
     alignItems: 'flex-end',
-    paddingVertical: 10,
+    paddingBottom: 20,
     flexDirection: 'row'
   },
   singupText:{

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {StyleSheet} from 'react-native';
 import {Router,Stack,Scene} from 'react-native-router-flux';
+import Options from './components/optionsButton';
 import Login from './pages/login';
 import Singup from './pages/singup';
 import Landing from './pages/landing';
@@ -35,10 +36,10 @@ export default class Routes extends React.Component {
         return(
             <Router >
                 <Scene key="root"   navigationBarStyle={{ height: 40,paddingTop:5}} titleStyle={styles.navTitle} >
-                    <Scene key="login"  component={Login} db ={firestore} fontLoaded= {this.state.fontLoaded} title="Login" hideNavBar={true}/>
+                    <Scene key="login"  component={Login} db ={firestore}  title="Login" hideNavBar={true}/>
                     <Scene key="signup" component={Singup} db ={firestore} title="Register" hideNavBar={true}/>
                     <Scene key="sketch" component={Sketch} db ={firestore} title="New Sketch" hideNavBar={false}/>
-                    <Scene key="listSketches" component={ListSketches} db ={firestore} title="Sketches" renderLeftButton={()=>(null)} />
+                    <Scene key="listSketches" component={ListSketches} db ={firestore} title="Sketches" renderLeftButton={()=>(null)}  />
                     <Scene key="landing" component={Landing} db ={firestore} />
                     <Scene key="sketchProfile" component={SketchProfile} db ={firestore} title="Sketch Results" />
                     <Scene key="displayLayout" component={DisplayLayout} db ={firestore} title="Layout" />

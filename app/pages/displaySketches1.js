@@ -7,11 +7,13 @@ import {
   Image,
   Alert,
   Dimensions,
-  ScrollView
+  ScrollView,
+  BackHandler
 } from 'react-native';
 import ImageLoad from 'react-native-image-placeholder';
 import { Actions } from 'react-native-router-flux';
 import * as firebase from 'firebase';
+import Options from '../components/optionsButton';
 
 const resizeComponent = (value,percentage) =>{
   return value - (value * (percentage/100));
@@ -56,6 +58,12 @@ export default class displaySketches1 extends React.Component {
     sketches: [],
     isEmpty: false
   };
+
+  static renderRightButton = (props) => {
+    return (
+      <Options user={props.email} db={props.db}/>
+    );
+}
   newSkecth = () =>{
     let email = this.props.email;
     Actions.sketch({email:email});
@@ -63,6 +71,28 @@ export default class displaySketches1 extends React.Component {
   componentDidMount(){
     // this._fetchNormalData();
     unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate);
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.goBack(); // works best when the goBack is async
+      return true;
+    });
+  }
+  async goBack(){
+   
+    Alert.alert(
+      'Logout from your Account',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'Log Out', onPress: () => Actions.login()},
+      ],
+      {cancelable: false},
+    );
+    console.log("yeee");
+    // await Actions.login();
   }
   componentWillUnmount() {
     unsubscribe= null;
@@ -121,7 +151,7 @@ export default class displaySketches1 extends React.Component {
         }.bind(this))
         .catch(function(error) {
             console.log("Error getting documents:", error);
-        });;
+        });
         //Delete original and predicted image from cloud storage
         //Dowloadurl to find out if the image url still exists before downloading
         await originalImage.getDownloadURL().then(function(url) {

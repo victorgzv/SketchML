@@ -142,8 +142,7 @@ async function uploadImageAsync(uri,email,sname) {
   
   const snapshot = await ref.put(blob).then(function(snapshot) {
     console.log('Uploaded an image called: '+ email+"/" + sname);
-    Alert.alert('Upload image','Image uploaded successfully');
-    
+    // Alert.alert('Upload image','Image uploaded successfully');
   });
    
   // We're done with the blob, close and release it
