@@ -1,0 +1,6 @@
+model_checkpoint_path: "/Users/victorgzv/Desktop/MLPrototypeDF/rcnn/sketchML/experiments/training/model.ckpt-1708"
+all_model_checkpoint_paths: "/Users/victorgzv/Desktop/MLPrototypeDF/rcnn/sketchML/experiments/training/model.ckpt-334"
+all_model_checkpoint_paths: "/Users/victorgzv/Desktop/MLPrototypeDF/rcnn/sketchML/experiments/training/model.ckpt-675"
+all_model_checkpoint_paths: "/Users/victorgzv/Desktop/MLPrototypeDF/rcnn/sketchML/experiments/training/model.ckpt-1015"
+all_model_checkpoint_paths: "/Users/victorgzv/Desktop/MLPrototypeDF/rcnn/sketchML/experiments/training/model.ckpt-1362"
+all_model_checkpoint_paths: "/Users/victorgzv/Desktop/MLPrototypeDF/rcnn/sketchML/experiments/training/model.ckpt-1708"

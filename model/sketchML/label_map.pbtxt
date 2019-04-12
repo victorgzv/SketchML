@@ -1,0 +1,24 @@
+item {
+  id: 1
+  name: 'text'
+}
+
+item {
+  id: 2
+  name: 'text_input'
+}
+
+item {
+  id: 3
+  name: 'button'
+}
+
+item {
+  id: 4
+  name: 'image'
+}
+
+item {
+  id: 5
+  name: 'switch'
+}
