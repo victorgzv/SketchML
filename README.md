@@ -7,7 +7,6 @@ Users can create projects and upload images through the mobile application. A co
 
 [![Video demostration](https://img.youtube.com/vi/cl_jWwF0LNk/0.jpg)](http://www.youtube.com/watch?v=cl_jWwF0LNk)
 
-[![Video](http://img.youtube.com/vi/cl_jWwF0LNk&t=12s/0.jpg)](https://www.youtube.com/watch?v=cl_jWwF0LNk&t=12s&feature=youtu.be)
 
 ## Project structure:
 - app: This folder contains the mobile application developed in React Native using Expo.
