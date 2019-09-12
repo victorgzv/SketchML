@@ -5,6 +5,7 @@ Writing front-end code can be time-consuming. The objective of this Project is t
 
 Users can create projects and upload images through the mobile application. A computer vision model predicts what UI elements are present in the image and their location. A layout algorithm uses the spatial information from all the bounding boxes of the predicted elements to generate a grid structure that accommodates all. All these pieces of information are used to generate React Native code reflecting the result.
 
+[![Video demostration](https://img.youtube.com/vi/cl_jWwF0LNk/0.jpg)](http://www.youtube.com/watch?v=cl_jWwF0LNk)
 
 [![Video](http://img.youtube.com/vi/cl_jWwF0LNk&t=12s/0.jpg)](https://www.youtube.com/watch?v=cl_jWwF0LNk&t=12s&feature=youtu.be)
 
