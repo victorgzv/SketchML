@@ -28,7 +28,7 @@
     "react-native-swipeout": "^2.3.6",
     "react-typist": "^2.0.5",
     "rn-fetch-blob": "^0.10.15",
-    "sharp": "^0.21.3",
+    "sharp": "^0.30.5",
     "sort-by-distance": "^1.1.0"
   },
   "devDependencies": {
