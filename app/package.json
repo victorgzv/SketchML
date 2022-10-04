@@ -10,7 +10,7 @@
     "@google-cloud/storage": "^2.5.0",
     "box-intersect": "^1.0.2",
     "child-process-promise": "^2.2.1",
-    "expo": "^31.0.2",
+    "expo": "^46.0.14",
     "expo-firebase-firestore": "^1.0.0-rc.5",
     "firebase": "^5.7.0",
     "pretty-format": "^24.3.1",
